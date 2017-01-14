@@ -1,0 +1,14 @@
+$to = 'to@example.com';
+$cc = 'cc@example.com';
+$recipients = $to.", ".$cc;
+$headers['From']    = 'from@example.com';
+$headers['To']      = $to;
+$headers['Subject'] = 'Test message';
+$headers['Cc']      = 'cc@example.com';
+$headers['Reply-To'] = 'from@example.com';
+ 
+$send = $mail->send($recipients, $headers, $body);
+The solution works perfectly. 
+Now the email addresses show up in the correct fields and all the recipients receive the email.
+To Blind CC (aka, BCC) an address, simply add the address to the $recipients, 
+but not to any of the $headers (thanks Jason!).
