@@ -1,72 +1,73 @@
 felhasznalo
-- id,
-- keresztnév, 
-- emailcím,
-- engedély
-- jelszó
-- szerepkör_id
+- id : integer
+- keresztnév : string
+- emailcím : string
+- engedély : bool
+- jelszó : string 
+- szerepkör_id : integer
 
 szerepkor
-- id
-- név (admin, játékos)
+- id : integer
+- név (admin, játékos) : string
 
 üzenet
-- id,
-- küldõ_felhasználó_id,
-- emailcím,
-- kérdés,
-- válasz1
-- válasz2
-- válasz3
-- helyesválasz_sorszám
-- t_uzenet
-- kep_id
+- id, : integer
+- küldõ_felhasználó_id, : integer
+- emailcím,: string
+- kérdés, : string
+- válasz1 : string
+- válasz2 : string
+- válasz3 : string
+- helyesválasz_sorszám : integer
+- t_uzenet : string
+- kep_id : integer
 
 kép
-- id
-- url
+- id : integer
+- url : string
 
 kategória
-- id
-- név
+- id : integer
+- név : string
 
 promóció
-- id
-- kategória_id
-- név (nyeremény'játék' név)
-- leírás
-- kep_url
-- help_url
-- kérdés1
-- kérdés2
-- kérdés3
-- kérdés4
-- valasz1_1
-- valasz1_2
-- valasz1_3
-- valasz1_4
-- valasz2_1
-- valasz2_2
-- valasz2_3
-- valasz2_4
-- valasz3_1
-- valasz3_2
-- valasz3_3
-- valasz3_4
-- valasz4_1
-- valasz4_2
-- valasz4_3
-- valasz4_4
-- helyes1
-- helyes2
-- helyes3
-- helyes4
-- datum (sorsolásig)
-- kiküldve (értesítettük-e már a felhasználókat errõl az "új" játékról)
+- id : integer
+- kategória_id : integer
+- név (nyeremény'játék' név) : string
+- leírás : string
+- kep_url : string
+- help_url : string
+- kérdés1 : string
+- kérdés2 : string
+- kérdés3 : string
+- kérdés4 : string
+- valasz1_1 : string
+- valasz1_2 : string
+- valasz1_3 : string
+- valasz1_4 : string
+- valasz2_1 : string
+- valasz2_2 : string
+- valasz2_3 : string
+- valasz2_4 : string
+- valasz3_1 : string
+- valasz3_2 : string
+- valasz3_3 : string
+- valasz3_4 : string
+- valasz4_1 : string
+- valasz4_2 : string
+- valasz4_3 : string
+- valasz4_4 : string
+- helyes_sorszam1 : integer
+- helyes_sorszam2 : integer
+- helyes_sorszam3 : integer
+- helyes_sorszam4 : integer
+- datum (sorsolásig) : date
+- kiküldve (értesítettük-e már a felhasználókat errõl az "új" játékról) : bool
 
 
 teljesites
-- id
-- felhasználó_id
-- promóció_id
+- id : integer
+- felhasználó_id : integer
+- promóció_id : integer
+- teljesült_e: bool
 
