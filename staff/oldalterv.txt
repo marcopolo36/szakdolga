@@ -1,4 +1,5 @@
-- index : email_küldés, játék linkek
+- bejelentkezes
+- kezdolap : email_küldés, játék linkek
 - facebook_landing_page
 - regisztracio : üzletszabályzat
 - üzletszabályzat
@@ -14,4 +15,4 @@
 	
 
 facebook_landing_page -> regisztráció (üzenetküldõ) -> üzenetküldés_page
-index -> regisztráció (játékos) -> kvízjáték_page
+kezdolap -> regisztráció (játékos) -> kvízjáték_page

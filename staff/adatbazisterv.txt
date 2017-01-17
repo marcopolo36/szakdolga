@@ -1,6 +1,6 @@
 felhasznalo
 - id : integer
-- keresztnév : string
+- felhasználó_név : string
 - emailcím : string
 - engedély : bool
 - jelszó : string 
@@ -14,6 +14,7 @@ szerepkor
 - id, : integer
 - küldõ_felhasználó_id, : integer
 - emailcím,: string
+- keresztnév_küldõ : string
 - kérdés, : string
 - válasz1 : string
 - válasz2 : string

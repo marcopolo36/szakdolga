@@ -1,3 +1,10 @@
+<?php
+
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -13,7 +20,7 @@
 	
 	<div id="row">
 		
-		<div class="col-sm-12" >
+		<div class="col-sm-12" style="background-color:#af90af;">
 
 			<nav class="navbar navbar-default">
 			  <div class="container-fluid">
@@ -44,56 +51,14 @@
 		
 		<!--<p><?php /* echo $page_content; */ ?></p>-->
 
-		<div class="col-sm-12">
+		<div class="col-sm-12" style="background-color:lavender;">
 			<div class="panel panel-primary">
 				<div class="panel-heading">
 					<h3 class="panel-title">
 						<?php echo $page_main_title; ?>
-						<?php
-						if (!isset($uzenet)){
-							//...
-						} else {
-							if ($uzenet == 0) {
-								?><p>Sikeres törlés</p><?php
-							}
-							if ($uzenet == 1){
-								?><p>Sikertelen törlés</p><?php
-							}
-							if ($uzenet == 2){
-								?><p>Sikeresen visszaállítottam mindenkit aktívvá</p><?php
-							}		
-							if ($uzenet == 3){
-								?><p>Sikertelen volt az aktívvá váltás!</p><?php
-							}	
-						}
-						?>
 					</h3>
 				</div>
 				<div class="panel-body">
-					<?php  
-					foreach($row as $subarray){
-						if($subarray["u_active"] == 1) {
-							?><p><?php echo $subarray["u_id"]; ?>&nbsp;<?php
-							?><?php echo $subarray["u_name"]; ?></p><?php
-							?>
-								<form method="post">
-									<input type="hidden" name="felhasznalok_id" value="<?php echo $subarray["u_id"]; ?>">
-									<input type="hidden" name="site" value="select">
-									<input type="hidden" name="action" value="felhasznalok_torol">
-									<input type="submit" value="Törlés" />
-								</form>
-							<?php
-						} else {
-							?><p>Nincs jogosultságod megtekinteni!</p><?php
-						}
-					}
-					?>
-					
-					<form method="post">
-						<input type="hidden" name="site" value="select">
-						<input type="hidden" name="action" value="felhasznalok_visszaallit">
-						<input type="submit" value="Felhasználók összes aktívvá változtat" />
-					</form>					
 					
 				</div>
 			</div>
