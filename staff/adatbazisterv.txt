@@ -10,7 +10,7 @@ szerepkor
 - id : integer
 - név (admin, játékos) : string
 
-üzenet
+üzenet //eredményt nem mentjük el
 - id, : integer
 - küldõ_felhasználó_id, : integer
 - emailcím,: string
@@ -38,33 +38,19 @@ promóció
 - leírás : string
 - kep_url : string
 - help_url : string
-- kérdés1 : string
-- kérdés2 : string
-- kérdés3 : string
-- kérdés4 : string
-- valasz1_1 : string
-- valasz1_2 : string
-- valasz1_3 : string
-- valasz1_4 : string
-- valasz2_1 : string
-- valasz2_2 : string
-- valasz2_3 : string
-- valasz2_4 : string
-- valasz3_1 : string
-- valasz3_2 : string
-- valasz3_3 : string
-- valasz3_4 : string
-- valasz4_1 : string
-- valasz4_2 : string
-- valasz4_3 : string
-- valasz4_4 : string
-- helyes_sorszam1 : integer
-- helyes_sorszam2 : integer
-- helyes_sorszam3 : integer
-- helyes_sorszam4 : integer
 - datum (sorsolásig) : date
 - kiküldve (értesítettük-e már a felhasználókat errõl az "új" játékról) : bool
 
+kérdés
+- id : integer
+- promocio_id : integer
+- szöveg : string
+
+válasz
+- id
+- kérdés_id : integer
+- szöveg : string
+- helyes : bool
 
 teljesites
 - id : integer

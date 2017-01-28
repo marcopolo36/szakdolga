@@ -20,6 +20,9 @@ if(isset($_GET["site"])){
         } elseif ($_GET["site"]=="bejelentkezes"){
 		include("model/model_bejelentkezes.php");
 		include("view/view_bejelentkezes.php");
+        } elseif ($_GET["site"]=="kijelentkezes"){
+		include("model/model_kijelentkezes.php");
+		include("view/view_kijelentkezes.php");
 	} else {
 		include("model/model_kezdolap.php");
 		include("view/view_kezdolap.php");		
