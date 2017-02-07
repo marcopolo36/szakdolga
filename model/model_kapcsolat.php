@@ -1,15 +1,16 @@
 <?php
 
-	$page_title = "Kezdőlap";
+	$page_title = "Kapcsolat";
 	$menu = array(
 		"kezdolap"=>"Kezdőlap", 
 		"regisztracio"=>"Regisztráció",
 		"uzenetkuldes"=>"Üzenetküldés",
 		"kvizjatek"=>"Kvízjáték",
                 "kapcsolat"=>"Kapcsolat",
-                "bejelentkezes"=>"Bejelentkezés"
+                "bejelentkezes"=>"Bejelentkezés",
+                "admin"=>"Adminisztráció"
 		);
 	$page_main_title = "Kapcsolat oldal!";
-	$page_content = "Kapcsolat oldal tartalma, bla, bla, bla, asd, asd, asd! Kezdőlap oldal tartalma, bla, bla, bla, asd, asd, asd! Kezdőlap oldal tartalma, bla, bla, bla, asd, asd, asd! Kezdőlap oldal tartalma, bla, bla, bla, asd, asd, asd! Kezdőlap oldal tartalma, bla, bla, bla, asd, asd, asd!Kezdőlap oldal tartalma, bla, bla, bla, asd, asd, asd! Kezdőlap oldal tartalma, bla, bla, bla, asd, asd, asd! Kezdőlap oldal tartalma, bla, bla, bla, asd, asd, asd!Kezdőlap oldal tartalma, bla, bla, bla, asd, asd, asd! Kezdőlap oldal tartalma, bla, bla, bla, asd, asd, asd! Kezdőlap oldal tartalma, bla, bla, bla, asd, asd, asd!";
+	$page_content = "Kapcsolat oldal tartalma";
 
 ?>

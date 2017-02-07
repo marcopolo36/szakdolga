@@ -23,14 +23,17 @@ if(isset($_GET["site"])){
         } elseif ($_GET["site"]=="kijelentkezes"){
 		include("model/model_kijelentkezes.php");
 		include("view/view_kijelentkezes.php");
+        } elseif ($_GET["site"]=="admin"){
+		include("model/model_admin.php");
+		include("view/view_admin.php");	
 	} else {
 		include("model/model_kezdolap.php");
-		include("view/view_kezdolap.php");		
+		include("view/view_kezdolap.php");			
 	}
 } else {
-		include("model/model_kezdolap.php");
-		include("view/view_kezdolap.php");	
-	
+        include("model/model_kezdolap.php");
+        include("view/view_kezdolap.php");
 }
+
 
 ?>

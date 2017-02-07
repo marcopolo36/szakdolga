@@ -49,20 +49,6 @@
 
 		</div>
 		
-		<!--<p><?php /* echo $page_content; */ ?></p>-->
-            
-                <?php if(! isset($_SESSION['felhasznalo_nev'])) { ?>                  
-                    <h2>Bejelentkezés</h2>
-                    <form method="post" action="index.php?site=bejelentkezes">  
-                      Felhasználónév: <input type="text" name="nev">
-                      <br><br>
-                      Jelszó: <input type="password" name="jelszo">
-                      <br><br>
-                      <input type="submit" name="submit" value="Submit">  
-                    </form>
-                <?php } else { ?>
-                    <p>Üdvözlünk <?php echo $_SESSION['felhasznalo_nev'] ?>! Már be vagy jelentkezve. </p>
-                <?php } ?>
 
 		<div class="col-sm-12" style="background-color:lavender;">
 			<div class="panel panel-primary">
@@ -73,6 +59,20 @@
 				</div>
 				<div class="panel-body">
 					
+                                <!--<p><?php /* echo $page_content; */ ?></p>-->
+
+                                <?php if(! isset($_SESSION['felhasznalo_nev'])) { ?>                  
+                                    <h2>Bejelentkezés</h2>
+                                    <form method="post" action="index.php?site=bejelentkezes">  
+                                      Felhasználónév: <input type="text" name="nev">
+                                      <br><br>
+                                      Jelszó: <input type="password" name="jelszo">
+                                      <br><br>
+                                      <input type="submit" name="submit" value="Submit">  
+                                    </form>
+                                <?php } else { ?>
+                                    <p>Üdvözlünk <?php echo $_SESSION['felhasznalo_nev'] ?>! Már be vagy jelentkezve. </p>
+                                <?php } ?>
 				</div>
 			</div>
 

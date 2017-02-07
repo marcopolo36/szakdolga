@@ -18,10 +18,14 @@ class MySQLDatabase {
             mysql_select_db($this->db["dbname"], $this->_connection);
             mysql_query("SET NAMES utf8;");
 	}
+        
+        function __destruct() {
+            mysql_close($this->_connection);
+        }
 	
 	function query($query_string,$vars=array()) {
-		foreach($vars as $key => $var) { //végigmegy a kulcs és értékpárokon
-			$query_string = str_replace('{'.$key.'}',mysql_real_escape_string($var),$query_string);
+		foreach($vars as $key => $value) { //végigmegy a kulcs és értékpárokon
+			$query_string = str_replace('{'.$key.'}',mysql_real_escape_string($value),$query_string);//kiszedi a parancs karaktereket
 		}
 		$query_string=str_replace('{PREFIX}',$this->prefix,$query_string);
 		$this->last = $query_string;
@@ -30,14 +34,14 @@ class MySQLDatabase {
 	
 	function num_rows($query_string,$vars) {
 		$result = $this->query($query_string,$vars);
-		return ($result)?mysql_num_rows($result):0;
+		return ($result) ? mysql_num_rows($result) : 0; //
 	}
 	
-	function insert_id() {
+	function insert_id() { //az adatbázisba beszúr egy id-t
 		return mysql_insert_id($this->_connection);
 	}
 	
-	function report() {
+	function report() { //Visszatés a MySQL hiba számmaá : MySQL hiba, hozzáfűzi az utolsó MySQL lekérdezést
 		return mysql_errno($this->_connection).': '.mysql_error($this->_connection).'<br>'.$this->last;
 	}	
 }

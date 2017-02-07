@@ -1,5 +1,5 @@
 <?php
-//függvény és osztálydefiníciók
+//fï¿½ggvï¿½ny ï¿½s osztï¿½lydefinï¿½ciï¿½k
 
 class MySQLDatabase {
 	private $_connection;
@@ -38,117 +38,112 @@ class MySQLDatabase {
 }
 
 // kviz.php
-//kapcsolódás az adatbázishoz
+//kapcsolï¿½dï¿½s az adatbï¿½zishoz
 if(!@include("config.php")) 
-	die('úgy tûnik a program még nincs telepítve :(');
+	die('ï¿½gy tï¿½nik a program mï¿½g nincs telepï¿½tve :(');
 
-$db_iface = new MySQLDatabase($db['host'],$db['user'],$db['password'],$db['dbname'],$db['table_prefix'],'latin2');
-define('PREFIX',$db['table_prefix']);
-
-header('Content-type: text/html; charset=iso-8859-2');
-
-//kvíz megjelenítés
+//kvï¿½z megjelenï¿½tï¿½s
 function quiz($id) {
 	global $db_iface;
-	/*A $id azonosítójú kvízt jeleníti meg*/
+	/*A $id azonosï¿½tï¿½jï¿½ kvï¿½zt jelenï¿½ti meg*/
 	
-	//ellenõrzés hogy létezik-e ez az azonosító + a cím lekérdezése
+	//ellenï¿½rzï¿½s hogy lï¿½tezik-e ez az azonosï¿½tï¿½ + a cï¿½m lekï¿½rdezï¿½se
 	$result = $db_iface->query('SELECT * FROM `{PREFIX}kviz` WHERE `{PREFIX}kviz`.`id`={ID};',array('ID'=>$id));
 	$rows = ($result)?mysql_num_rows($result):0;
 	if($rows == 0) {
-		print 'Az id='.$id.' kvíz nem létezik.';
+		print 'Az id='.$id.' kvï¿½z nem lï¿½tezik.';
 		return;
 	}
-	$title = mysql_fetch_assoc($result); //kvíz adattábla egy sorát adja vissza
-	$title = $title['title'];  //kvíz cimét lementi
+	$title = mysql_fetch_assoc($result); //kvï¿½z adattï¿½bla egy sorï¿½t adja vissza
+	$title = $title['title'];  //kvï¿½z cimï¿½t lementi
 	
-	//munkamenet nyitása, ha még nem volt elkezdve
-	if(!isset($_SESSION) && false === @session_start()) //@ - PHP hibaüzenetek elnyomása
-		die('Probléma a munkamenetekkel!<br>a fájlba ahol felhasználod a quiz scriptet, feltétlenül írd be legelõre, hogy &lt;?php session_start(); ?&gt<br>még szóköz se legyen elõtte!');
+	//munkamenet nyitï¿½sa, ha mï¿½g nem volt elkezdve
+	if(!isset($_SESSION) && false === @session_start()) //@ - PHP hibaï¿½zenetek elnyomï¿½sa
+		die('Problï¿½ma a munkamenetekkel!<br>a fï¿½jlba ahol felhasznï¿½lod a quiz scriptet, feltï¿½tlenï¿½l ï¿½rd be legelï¿½re, hogy &lt;?php session_start(); ?&gt<br>mï¿½g szï¿½kï¿½z se legyen elï¿½tte!');
 	
-	//a felhasználó által már megválaszolt kérdések eltárolása/betöltése
+	//a felhasznï¿½lï¿½ ï¿½ltal mï¿½r megvï¿½laszolt kï¿½rdï¿½sek eltï¿½rolï¿½sa/betï¿½ltï¿½se
 	$answers = array();
 	if(!isset($_SESSION['quiz-'.$id]) || isset($_POST['reset_quiz'])){
 		$_SESSION['quiz-'.$id] = array();
 		/*-------------------*/
-		/*---ÜDVÕZLÕSZÖVEG---*/
+		/*---ï¿½DVï¿½ZLï¿½SZï¿½VEG---*/
 		/*-------------------*/
 	} else {
-		$answers = &$_SESSION['quiz-'.$id]; // $answers az álneve lett a $_SESSION['quiz-'.$id] munkamenetváltozónak
+		$answers = &$_SESSION['quiz-'.$id]; // $answers az ï¿½lneve lett a $_SESSION['quiz-'.$id] munkamenetvï¿½ltozï¿½nak
 	
-		/*A beérkezõ válasz feldolgozása*/
+		/*A beï¿½rkezï¿½ vï¿½lasz feldolgozï¿½sa*/
 		if(isset($_POST['answer']) && is_numeric($_POST['answer']) &&
 		   isset($_POST['question']) && is_numeric($_POST['question']) &&
 		   $db_iface->num_rows('SELECT * FROM `{PREFIX}valasz` WHERE `id`={ANSWER} AND `kerdes`={QUESTION};'
-						 ,array('ANSWER'=>$_POST['answer'],'QUESTION' =>$_POST['question'])) != 0) { //a Post-ból érkezõ számot beírja az adatbázisba és úgy hajtja végre az SQL lekérdezést
-			//létezik ez a kérdés és a válasz, és összetartoznak
-			if(isset($answers[$_POST['question']])) { // a tömbben már létezik kulcs érték pár
-				$error = 'Ez furcsa, egyszer már válaszoltál erre a kérdésre, na sebaj';
+						 ,array('ANSWER'=>$_POST['answer'],'QUESTION' =>$_POST['question'])) != 0) { //a Post-bï¿½l ï¿½rkezï¿½ szï¿½mot beï¿½rja az adatbï¿½zisba ï¿½s ï¿½gy hajtja vï¿½gre az SQL lekï¿½rdezï¿½st
+			//lï¿½tezik ez a kï¿½rdï¿½s ï¿½s a vï¿½lasz, ï¿½s ï¿½sszetartoznak
+			if(isset($answers[$_POST['question']])) { // a tï¿½mbben mï¿½r lï¿½tezik kulcs ï¿½rtï¿½k pï¿½r
+				$error = 'Ez furcsa, egyszer mï¿½r vï¿½laszoltï¿½l erre a kï¿½rdï¿½sre, na sebaj';
 			}
 			$answers[$_POST['question']] = $_POST['answer'];
 		} else {
-			$error = 'Nem létezik a kérdés, vagy a válasz, vagy nem tartoznak össze';
+			$error = 'Nem lï¿½tezik a kï¿½rdï¿½s, vagy a vï¿½lasz, vagy nem tartoznak ï¿½ssze';
 		}
 	}
 	
-	//kérdések betöltése az adatbázisból
+	//kï¿½rdï¿½sek betï¿½ltï¿½se az adatbï¿½zisbï¿½l
 	$result = $db_iface->query('SELECT * FROM `{PREFIX}kerdes` WHERE `{PREFIX}kerdes`.`kviz`={ID};',array('ID'=>$id));
-	//ez a változó jelöli hogy befejeztük-e a quizt
+	//ez a vï¿½ltozï¿½ jelï¿½li hogy befejeztï¿½k-e a quizt
 	$finished = true;
-	//lásuk mi az elsõ olyan kérdés amit még nem válaszoltunk meg
+	//lï¿½suk mi az elsï¿½ olyan kï¿½rdï¿½s amit mï¿½g nem vï¿½laszoltunk meg
 	while($row = mysql_fetch_assoc($result)) {
-		if(!in_array($row['id'],array_keys($answers))) { //ha ez a kérdés még nem lett feltéve, kulcsok között keres
-			$finished = false;  //ha van egy megválaszolatlan kérdés, akkor még nem végeztünk
-			$question_id = $row['id']; $question_text = $row['kerdes']; //felteszi a kérdést, aminek az id-jét megszereztük
+		if(!in_array($row['id'],array_keys($answers))) { //ha ez a kï¿½rdï¿½s mï¿½g nem lett feltï¿½ve, kulcsok kï¿½zï¿½tt keres
+			$finished = false;  //ha van egy megvï¿½laszolatlan kï¿½rdï¿½s, akkor mï¿½g nem vï¿½geztï¿½nk
+			$question_id = $row['id']; $question_text = $row['kerdes']; //felteszi a kï¿½rdï¿½st, aminek az id-jï¿½t megszereztï¿½k
 			break;
 		}
 	}
-	$question_num_all = ($result)?mysql_num_rows($result):0; //hány kérdésünk van, ha nincs sora, akkor 0
-	$question_num = count($answers); //megszámoljuk a feltett kérdéseinket
+	$question_num_all = ($result)?mysql_num_rows($result):0; //hï¿½ny kï¿½rdï¿½sï¿½nk van, ha nincs sora, akkor 0
+	$question_num = count($answers); //megszï¿½moljuk a feltett kï¿½rdï¿½seinket
 	print "<div class=\"quiz\"><h1>$title</h1>";
 	
-	if($finished) { // ha befejeztük a kvízt
-		print 'Gratulálok<br />Sikeresen teljesítetted a kvízt';
+	if($finished) { // ha befejeztï¿½k a kvï¿½zt
+		print 'Gratulï¿½lok<br />Sikeresen teljesï¿½tetted a kvï¿½zt';
 		print '<table border="1">';
-		print "<tr><td><b>A kérdés</b></td><td><b>Az ön által adott válasz</b></td><td><b>A helyes válasz</b></td></tr>";
-		$helyesek = 0; //számlálót indít
-		foreach($answers as $q_id => $a_id) { // bejárjuk az asszociatív $answer tömbot, ahol az aktuális párból $q_id tárolja a kulcsot és $a_id az értéket
-			//a kérdés címe
+		print "<tr><td><b>A kï¿½rdï¿½s</b></td><td><b>Az ï¿½n ï¿½ltal adott vï¿½lasz</b></td><td><b>A helyes vï¿½lasz</b></td></tr>";
+		$helyesek = 0; //szï¿½mlï¿½lï¿½t indï¿½t
+		foreach($answers as $q_id => $a_id) { // bejï¿½rjuk az asszociatï¿½v $answer tï¿½mbot, ahol az aktuï¿½lis pï¿½rbï¿½l $q_id tï¿½rolja a kulcsot ï¿½s $a_id az ï¿½rtï¿½ket
+			//a kï¿½rdï¿½s cï¿½me
 			$result = $db_iface->query('SELECT * FROM `{PREFIX}kerdes` WHERE `id`={Q_ID};',array('Q_ID'=>$q_id));
 			$result = mysql_fetch_assoc($result);
-			if($result['kviz'] != $id) continue; //ellenõrzés
+			if($result['kviz'] != $id) continue; //ellenï¿½rzï¿½s
 			$cim = $result['kerdes'];
-			//a válaszod
+			//a vï¿½laszod
 			$result = mysql_fetch_assoc($db_iface->query('SELECT * FROM `{PREFIX}valasz` WHERE `id`={A_ID};',array('A_ID'=>$a_id)));
 			$valasz = $result['valasz'];
-			//a helyes válasz
+			//a helyes vï¿½lasz
 			$helyes_bol = false;
-			if($result['helyes']) { //ha az adatbázis logikai változója igaz (1)
-				$helyes = 'ez a válasz helyes';
-				$helyesek++; $helyes_bol = true; //helyes válaszokat eggyel nõveljük
-			} else { //különben az adatbázisból kiszedjük a helyes választ
+			if($result['helyes']) { //ha az adatbï¿½zis logikai vï¿½ltozï¿½ja igaz (1)
+				$helyes = 'ez a vï¿½lasz helyes';
+				$helyesek++; $helyes_bol = true; //helyes vï¿½laszokat eggyel nï¿½veljï¿½k
+			} else { //kï¿½lï¿½nben az adatbï¿½zisbï¿½l kiszedjï¿½k a helyes vï¿½laszt
 				$result = mysql_fetch_assoc($db_iface->query('SELECT * FROM `{PREFIX}valasz` WHERE (`kerdes`={Q_ID} AND `helyes` = 1);',array('Q_ID'=>$q_id)));
-				$helyes = 'a helyes válasz: '.$result['valasz'];
+				$helyes = 'a helyes vï¿½lasz: '.$result['valasz'];
 			}
 			
-			print "<tr><td>$cim</td><td><font color=\"".(($helyes_bol)?'green':'red')."\">$valasz</font></td><td>$helyes</td></tr>"; // a válaszokat ha helyes zöld színre váltja, ha hamis pirosra
+			print "<tr><td>$cim</td><td><font color=\"".(($helyes_bol)?'green':'red')."\">$valasz</font></td><td>$helyes</td></tr>"; // a vï¿½laszokat ha helyes zï¿½ld szï¿½nre vï¿½ltja, ha hamis pirosra
 		}
 		print '</table><br>';
-		$ossz = count($answers); $szazalek = round(($helyesek/$ossz)*100,2); //a százalékunk egy kerekített egész szám lesz 0-100 közözött
-		print "<font size=\"2em\"><b>$helyesek/$ossz helyes válasza volt<br/>$szazalek% teljesítmény</b></font>";
-		print '<form method="POST"><input type="submit" name="reset_quiz" value="Töröl"/></form>';
-	} else { //ha nincs befejezve a kvíz
-		/*mutassuk a következõ kérdést*/
+		$ossz = count($answers); $szazalek = round(($helyesek/$ossz)*100,2); //a szï¿½zalï¿½kunk egy kerekï¿½tett egï¿½sz szï¿½m lesz 0-100 kï¿½zï¿½zï¿½tt
+		print "<font size=\"2em\"><b>$helyesek/$ossz helyes vï¿½lasza volt<br/>$szazalek% teljesï¿½tmï¿½ny</b></font>";
+		print '<form method="POST"><input type="submit" name="reset_quiz" value="Tï¿½rï¿½l"/></form>';
+	} else { //ha nincs befejezve a kvï¿½z
+		/*mutassuk a kï¿½vetkezï¿½ kï¿½rdï¿½st*/
 		
-		print '<form method="POST"><input type="hidden" name="question" value="'.$question_id.'"/>'; // rejtett mezõben a formból megszerezzük a kérdés id-jét
-		print "<h2>$question_text</h2>".++$question_num."/$question_num_all kérdés<br/>"; // a hozzá tartozó kérdés szöveget, a megválaszolt kérdések számát növeljük
-		if(isset($error)) print "<!-- hiba az elõzõ kérdéskor -- $error -->"; // ha van hiba, akkor kiíratjuk a hiba tömbünkbõl
-		//a kérdéshez tartozó válaszokat töltjük be
-		$result = $db_iface->query('SELECT * FROM `{PREFIX}valasz` WHERE `{PREFIX}valasz`.`kerdes`={QID};',array('QID'=>$question_id)); //adatbázisból megszerezzük a kérdéshez tartozó válaszokat
+		print '<form method="POST"><input type="hidden" name="question" value="'.$question_id.'"/>'; // rejtett mezï¿½ben a formbï¿½l megszerezzï¿½k a kï¿½rdï¿½s id-jï¿½t
+		print "<h2>$question_text</h2>".++$question_num."/$question_num_all kï¿½rdï¿½s<br/>"; // a hozzï¿½ tartozï¿½ kï¿½rdï¿½s szï¿½veget, a megvï¿½laszolt kï¿½rdï¿½sek szï¿½mï¿½t nï¿½veljï¿½k
+		if(isset($error)) print "<!-- hiba az elï¿½zï¿½ kï¿½rdï¿½skor -- $error -->"; // ha van hiba, akkor kiï¿½ratjuk a hiba tï¿½mbï¿½nkbï¿½l
+		//a kï¿½rdï¿½shez tartozï¿½ vï¿½laszokat tï¿½ltjï¿½k be
+		$result = $db_iface->query('SELECT * FROM `{PREFIX}valasz` WHERE `{PREFIX}valasz`.`kerdes`={QID};',array('QID'=>$question_id)); //adatbï¿½zisbï¿½l megszerezzï¿½k a kï¿½rdï¿½shez tartozï¿½ vï¿½laszokat
 		while($row = mysql_fetch_assoc($result)) {
-			print '<input type="radio" name="answer" value="'.$row['id'].'"/> '.$row['valasz'].'<br />'; //kiíratjuk a kérdéshez tartozó válaszokat
+			print '<input type="radio" name="answer" value="'.$row['id'].'"/> '.$row['valasz'].'<br />'; //kiï¿½ratjuk a kï¿½rdï¿½shez tartozï¿½ vï¿½laszokat
 		}
-		print '<input type="submit" value="TOVÁBB"/> <input type="submit" name="reset_quiz" value="Töröl"/></form>'; //kíratjuk a TOVÁBB és TÖRÖL gombot
+		print '<input type="submit" value="TOVï¿½BB"/> <input type="submit" name="reset_quiz" value="Tï¿½rï¿½l"/></form>'; //kï¿½ratjuk a TOVï¿½BB ï¿½s Tï¿½Rï¿½L gombot
 	}
 	print '</div>';
 }
@@ -208,11 +203,11 @@ function quiz_admin() {
 			$errors = remove_quiz($_POST['del']);
 			
 			if(count($errors) != 0) {
-				print 'A kérés (mûvelet: kvíz törlése) feldolgozása közben a következõ hibák léptek föl:<br/>';
+				print 'A kï¿½rï¿½s (mï¿½velet: kvï¿½z tï¿½rlï¿½se) feldolgozï¿½sa kï¿½zben a kï¿½vetkezï¿½ hibï¿½k lï¿½ptek fï¿½l:<br/>';
 				foreach($errors as $error)
 					print $error.'<br/>';
 			} else {
-				print 'Hiba nélkül mûködött minden<br/>';
+				print 'Hiba nï¿½lkï¿½l mï¿½kï¿½dï¿½tt minden<br/>';
 			}
 			print '<form method="POST"><input type="submit" value="VISSZA" name="vissza"/></form>';
 		} elseif($_POST['action'] == 'show_quiz') {
@@ -222,34 +217,34 @@ function quiz_admin() {
 			} else {
 				$id = (int)$_POST['quiz_id'];
 			}
-			print '<table border="1"><tr><td>azonosító</td><td>kérdés</td><td>válaszok</td><td>törlés</td></tr>';
+			print '<table border="1"><tr><td>azonosï¿½tï¿½</td><td>kï¿½rdï¿½s</td><td>vï¿½laszok</td><td>tï¿½rlï¿½s</td></tr>';
 			$result = $db_iface->query('SELECT * FROM `{PREFIX}kerdes` WHERE `kviz`={ID};',array('ID'=>$id));
 			while($sor = mysql_fetch_assoc($result)) {
 				$valaszok = $db_iface->num_rows('SELECT * FROM `{PREFIX}valasz` WHERE `kerdes`={ID}',array('ID'=>$sor['id']));
-				print '<tr><td>'.$sor['id'].'</td><td>'.$sor['kerdes'].'</td><td>'.$valaszok.'</td><td><form method="POST"><input type="hidden" name="action" value="remove_question"/><input type="hidden" value="'.$sor['id'].'" name="del" /><input type="submit" name="kuld" value="Törlés"/></form></td>';
+				print '<tr><td>'.$sor['id'].'</td><td>'.$sor['kerdes'].'</td><td>'.$valaszok.'</td><td><form method="POST"><input type="hidden" name="action" value="remove_question"/><input type="hidden" value="'.$sor['id'].'" name="del" /><input type="submit" name="kuld" value="Tï¿½rlï¿½s"/></form></td>';
 			}
-			print '</table><form method="POST"><input type="hidden" name="action" value="new_question"/><input type="hidden" name="quiz_id" value="'.$id.'"/><input type="submit" name="gomb" value="Új kérdés"/></form><form method="POST"><input type="submit" value="VISSZA" name="vissza"/></form>';
+			print '</table><form method="POST"><input type="hidden" name="action" value="new_question"/><input type="hidden" name="quiz_id" value="'.$id.'"/><input type="submit" name="gomb" value="ï¿½j kï¿½rdï¿½s"/></form><form method="POST"><input type="submit" value="VISSZA" name="vissza"/></form>';
 		} elseif($_POST['action'] == 'create') {
-			//új kvíz készítése
+			//ï¿½j kvï¿½z kï¿½szï¿½tï¿½se
 			$success = false;
 			if(isset($_POST['title']) && !empty($_POST['title'])) {
 			   $success = $db_iface->query('INSERT INTO `{PREFIX}kviz` (`id`, `title`) VALUES (NULL, \'{TITLE}\');',array('TITLE'=>$_POST['title']));
 			}
 			if($success !== false) {
 				$quiz = $db_iface->insert_id();
-				print 'A quizt sikeresen létrehozta!<br/><form method="POST"><input type="hidden" name="action" value="new_question"/><input type="hidden" name="quiz_id" value="'.$quiz.'"/><input type="submit" name="gomb" value="Tovább"/></form>';
+				print 'A quizt sikeresen lï¿½trehozta!<br/><form method="POST"><input type="hidden" name="action" value="new_question"/><input type="hidden" name="quiz_id" value="'.$quiz.'"/><input type="submit" name="gomb" value="Tovï¿½bb"/></form>';
 			} else {
-				print '<form method="POST"><input type="hidden" name="action" value="create"/><label for="title">A quiz címe</label> <input type="text" name="title" value="'.((isset($_POST['title']))?$_POST['title']:'').'"/> <input type="submit" name="kuld" value="Létrehoz"/></form>';
+				print '<form method="POST"><input type="hidden" name="action" value="create"/><label for="title">A quiz cï¿½me</label> <input type="text" name="title" value="'.((isset($_POST['title']))?$_POST['title']:'').'"/> <input type="submit" name="kuld" value="Lï¿½trehoz"/></form>';
 			}
 			
 			print '<br/><form method="POST"><input type="submit" value="VISSZA" name="vissza"/></form>';
 		} elseif($_POST['action'] == 'new_question') {
 			$result = $db_iface->query('SELECT * FROM `{PREFIX}kviz` WHERE `id`={ID};',array('ID'=>$_POST['quiz_id']));
 			if($result === false || mysql_num_rows($result) == 0) {
-				print 'Hiba a kérdéses quiz (id='.$_POST['quiz_id'].') nem létezik, vagy más hiba lépett fel<br/>mysql válasza: '.$db_iface->report();
+				print 'Hiba a kï¿½rdï¿½ses quiz (id='.$_POST['quiz_id'].') nem lï¿½tezik, vagy mï¿½s hiba lï¿½pett fel<br/>mysql vï¿½lasza: '.$db_iface->report();
 			} else {
 				$result = mysql_fetch_assoc($result);
-				print 'Új kérdés hozzáadása az "'.$result['title'].'" quizhez<br/>';
+				print 'ï¿½j kï¿½rdï¿½s hozzï¿½adï¿½sa az "'.$result['title'].'" quizhez<br/>';
 				$siker = false;
 				if(isset($_POST['valaszok']) && !empty($_POST['valaszok']) && is_numeric($_POST['valaszok']) && 2<=$_POST['valaszok']) {
 					$valaszok = array();
@@ -274,11 +269,11 @@ function quiz_admin() {
 						
 						$errors = array();
 						if(!isset($_POST['kerdes']) || empty($_POST['kerdes'])) {
-							$errors[] = 'Üresen hagytad a kérdés címét';
+							$errors[] = 'ï¿½resen hagytad a kï¿½rdï¿½s cï¿½mï¿½t';
 						} elseif(count($valaszok) < 2) {
-							$errors[] = 'Kettõnél kevesebb válasszal nincs értelme egy kérdésnek';
+							$errors[] = 'Kettï¿½nï¿½l kevesebb vï¿½lasszal nincs ï¿½rtelme egy kï¿½rdï¿½snek';
 						} elseif(!isset($_POST['helyes']) || !is_numeric($_POST['helyes']) || !isset($valaszok[$_POST['helyes']])) {
-							$errors[] = 'Nem jelölted ki a helyes választ';
+							$errors[] = 'Nem jelï¿½lted ki a helyes vï¿½laszt';
 						} else {
 							$success = $db_iface->query('INSERT INTO `{PREFIX}kerdes` (`id`, `kviz`, `kerdes`) VALUES (NULL, \'{QUIZ}\', \'{KERD}\');',array('QUIZ'=>$_POST['quiz_id'],'KERD'=>$_POST['kerdes']));
 							if(!$success) $errors[] = $db_iface->report(); else {
@@ -293,14 +288,14 @@ function quiz_admin() {
 					}
 				}
 				if($siker) {
-					print 'A kérdés sikeresen hozzáadva az adatbázishoz<br/>';
-					print '<form method="POST"><input type="hidden" name="action" value="new_question"/><input type="hidden" name="quiz_id" value="'.$_POST['quiz_id'].'"/><input type="submit" name="kuld" value="+1 kérdés"/></form>';
+					print 'A kï¿½rdï¿½s sikeresen hozzï¿½adva az adatbï¿½zishoz<br/>';
+					print '<form method="POST"><input type="hidden" name="action" value="new_question"/><input type="hidden" name="quiz_id" value="'.$_POST['quiz_id'].'"/><input type="submit" name="kuld" value="+1 kï¿½rdï¿½s"/></form>';
 				} else {
 					if(isset($errors))
 						foreach($errors as $error) 
 							print "<b><font color=\"red\">$error</b></font>";
 					print '<form method="POST"><input type="hidden" name="action" value="new_question"/><input type="hidden" name="quiz_id" value="'.$_POST['quiz_id'].'"/>';
-					print '<label for="kerdes">A kérdés: </label><input type="text" id="kerdes" name="kerdes" value="'.((isset($_POST['kerdes']))?$_POST['kerdes']:'').'"/><br/>';
+					print '<label for="kerdes">A kï¿½rdï¿½s: </label><input type="text" id="kerdes" name="kerdes" value="'.((isset($_POST['kerdes']))?$_POST['kerdes']:'').'"/><br/>';
 					if(!isset($valaszok)) {
 						$valaszok = array('','');
 					} elseif(count($valaszok)==0) {
@@ -314,7 +309,7 @@ function quiz_admin() {
 						$helyes = (isset($_POST['helyes']) && $_POST['helyes'] == $key)?' checked':'';
 						print '<tr><td><input type="radio" name="helyes" value="'.$key.'"'.$helyes.'/></td><td><input type="text" name="valasz_'.$key.'" value="'.$valasz.'"/></td></tr>';
 					}
-					print '</table><br/><input type="submit" name="sent" value="Mehet"/> vagy <input type="submit" name="kerekmeg" value="+1 egy válaszlehetõség"/></form>';
+					print '</table><br/><input type="submit" name="sent" value="Mehet"/> vagy <input type="submit" name="kerekmeg" value="+1 egy vï¿½laszlehetï¿½sï¿½g"/></form>';
 				}
 			}
 			
@@ -323,25 +318,25 @@ function quiz_admin() {
 			$errors = remove_question($_POST['del']);
 			
 			if(count($errors) != 0) {
-				print 'A kérés (mûvelet: kvíz törlése) feldolgozása közben a következõ hibák léptek föl:<br/>';
+				print 'A kï¿½rï¿½s (mï¿½velet: kvï¿½z tï¿½rlï¿½se) feldolgozï¿½sa kï¿½zben a kï¿½vetkezï¿½ hibï¿½k lï¿½ptek fï¿½l:<br/>';
 				foreach($errors as $error)
 					print $error.'<br/>';
 			} else {
-				print 'Hiba nélkül mûködött minden<br/>';
+				print 'Hiba nï¿½lkï¿½l mï¿½kï¿½dï¿½tt minden<br/>';
 			}
 			print '<form method="POST"><input type="submit" value="VISSZA" name="vissza"/></form>';
 		} else {
-			print '<form method="POST">Ismeretlen mûvelet ('.$_POST['action'].') <input type="submit" value="VISSZA" name="vissza"/></form>';
+			print '<form method="POST">Ismeretlen mï¿½velet ('.$_POST['action'].') <input type="submit" value="VISSZA" name="vissza"/></form>';
 		}
 	} else {
-		print 'Kvízek oldaladba ágyazásához használd ezt: <b>&lt?php include("kviz.php"); quiz(15); ?&gt;</b> ahol a 15 helyére, a quiz azonosítóját írd!<br/>';
-		print '<table border="1"><tr><td>azonosító</td><td>cím</td><td>kérdések</td><td>mûveletek</td></tr>';
+		print 'Kvï¿½zek oldaladba ï¿½gyazï¿½sï¿½hoz hasznï¿½ld ezt: <b>&lt?php include("kviz.php"); quiz(15); ?&gt;</b> ahol a 15 helyï¿½re, a quiz azonosï¿½tï¿½jï¿½t ï¿½rd!<br/>';
+		print '<table border="1"><tr><td>azonosï¿½tï¿½</td><td>cï¿½m</td><td>kï¿½rdï¿½sek</td><td>mï¿½veletek</td></tr>';
 		$result = $db_iface->query('SELECT * FROM `{PREFIX}kviz`;');
 		while($sor = mysql_fetch_assoc($result)){
 			$kerdes_szam = $db_iface->num_rows('SELECT * FROM `{PREFIX}kerdes` WHERE `kviz`={ID};',array('ID' => $sor['id']));
-			print '<tr><td>'.$sor['id'].'</td><td>'.$sor['title'].'</td><td>'.$kerdes_szam.' db</td><td><form method="POST"><input type="hidden" name="action" value="remove"/><input type="hidden" value="'.$sor['id'].'" name="del" /><input type="submit" name="kuld" value="Törlés"/></form><form method="POST"><input type="hidden" name="action" value="show_quiz"/><input type="hidden" value="'.$sor['id'].'" name="quiz_id" /><input type="submit" name="kuld" value="Szerkesztés"/></form></td></tr>';
+			print '<tr><td>'.$sor['id'].'</td><td>'.$sor['title'].'</td><td>'.$kerdes_szam.' db</td><td><form method="POST"><input type="hidden" name="action" value="remove"/><input type="hidden" value="'.$sor['id'].'" name="del" /><input type="submit" name="kuld" value="Tï¿½rlï¿½s"/></form><form method="POST"><input type="hidden" name="action" value="show_quiz"/><input type="hidden" value="'.$sor['id'].'" name="quiz_id" /><input type="submit" name="kuld" value="Szerkesztï¿½s"/></form></td></tr>';
 		}
-		print '</table><form method="POST"><input type="hidden" name="action" value="create"/><input type="submit" name="send" value="Új"/></form>';
+		print '</table><form method="POST"><input type="hidden" name="action" value="create"/><input type="submit" name="send" value="ï¿½j"/></form>';
 	}
 }
 

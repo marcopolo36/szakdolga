@@ -26,7 +26,8 @@
 		"uzenetkuldes"=>"Üzenetküldés",
 		"kvizjatek"=>"Kvízjáték",
                 "kapcsolat"=>"Kapcsolat",
-                "bejelentkezes"=>"Bejelentkezés"
+                "bejelentkezes"=>"Bejelentkezés",
+                "admin"=>"Adminisztráció"
 		);
 	$page_main_title = "Bejelentkezés oldal!";
 
