@@ -25,7 +25,10 @@ if(isset($_GET["site"])){
 		include("view/view_kijelentkezes.php");
         } elseif ($_GET["site"]=="admin"){
 		include("model/model_admin.php");
-		include("view/view_admin.php");	
+		include("view/view_admin.php");
+        } elseif ($_GET["site"]=="titkos"){
+		include("model/model_titkos.php");
+		include("view/view_titkos.php");
 	} else {
 		include("model/model_kezdolap.php");
 		include("view/view_kezdolap.php");			

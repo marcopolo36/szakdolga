@@ -1,6 +1,39 @@
 <?php
     include('Mail.php');
     include('Mail/mime.php');
+    include('mysqldatabase.php');
+
+    $db_iface = new MySQLDatabase();
+    
+    $test_user_id = 1;
+    
+    function saveFormToSession(){
+        global $test_user_id;
+        $_SESSION['uzenet']=array('KULDO_FELHASZNALO_ID'=>$test_user_id,
+                                  'EMAILCIM'=>$_POST['to'],
+                                  'KERESZTNEV_KULDO'=>$_POST['firstname'],
+                                  'KERDES'=>$_POST['kerdes'],
+                                  'VALASZ_1'=>$_POST['valasz_0'],
+                                  'VALASZ_2'=>$_POST['valasz_1'],
+                                  'VALASZ_3'=>$_POST['valasz_2'], 
+                                  'HELYESVALASZ_SORSZAM'=>$_POST['helyes'],
+                                  'T_UZENET'=>$_POST['t_uzenet'],
+                                  'KEP_ID'=>$_POST['picture']);
+    }
+    
+    function alapertekkel_feltolt_form (){
+        global $test_user_id;
+        $_SESSION['uzenet']=array('KULDO_FELHASZNALO_ID'=>$test_user_id,
+                                  'EMAILCIM'=>"",
+                                  'KERESZTNEV_KULDO'=>"",
+                                  'KERDES'=>"",
+                                  'VALASZ_1'=>"",
+                                  'VALASZ_2'=>"",
+                                  'VALASZ_3'=>"",
+                                  'HELYESVALASZ_SORSZAM'=>"-1", //azt, jelenti, hogy nem írt be numerikus értéket 
+                                  'T_UZENET'=>"",
+                                  'KEP_ID'=>"-1");
+    }
     
     function betolt($cel, $tomorites, $tipus, $magassagX, $szelessegY) {
         if($tipus == IMAGETYPE_JPEG) {
@@ -35,8 +68,7 @@
         } elseif($tipus == IMAGETYPE_PNG) {
             imagepng($kep,  'images/temp.png');
         }
-    }
-  
+    }  
 
     $page_title = "Kezdőlap";
     $menu = array(
@@ -49,7 +81,41 @@
             );
     $page_main_title = "Üzenetküldés oldal!";
     $page_content = "";
-      
+    $valaszok = array();
+    $errors = array();
+    if (isset($_POST['action']) && $_POST['action'] == 'new_message') { //új kérdést viszünk be
+        saveFormToSession();
+        $siker = false;
+        if(isset($_POST['valaszok']) && !empty($_POST['valaszok']) && is_numeric($_POST['valaszok'])) { //érkezzenek postból válaszok és legalább 2 legyen!
+            for($i=0;$i<3;$i++) {
+                if(isset($_POST['valasz_'.$i]) && !empty($_POST['valasz_'.$i])) {
+                    $valaszok[$i] = $_POST['valasz_'.$i];
+                }
+            }      
+            if (count($valaszok) != 3) {
+                $errors[] = 'Nem töltötted ki az összes választ';
+            } elseif(!isset($_POST['kerdes']) || $errors[] = 'Üresen hagytad a kérdés címét' && empty($_POST['kerdes'])) {
+                $errors[] = 'Üresen hagytad a kérdés címét';
+            } elseif(!isset($_POST['helyes']) || !is_numeric($_POST['helyes']) || !isset($valaszok[$_POST['helyes']])) {
+                $errors[] = 'Nem jelölted ki a helyes választ';
+            } else {
+                
+                $success = $db_iface->query('INSERT INTO `{PREFIX}uzenet` (`kuldo_felhasznalo_id`,`emailcim`,`keresztnev_kuldo`,`kerdes`,`valasz_1`,`valasz_2`,`valasz_3`,`helyesvalasz_sorszam`,`t_uzenet`,`kep_id`) ' .
+                    'VALUES ( \'{KULDO_FELHASZNALO_ID}\', \'{EMAILCIM}\',\'{KERESZTNEV_KULDO}\',\'{KERDES}\',\'{VALASZ_1}\',\'{VALASZ_2}\',\'{VALASZ_3}\',\'{HELYESVALASZ_SORSZAM}\',\'{T_UZENET}\',\'{KEP_ID}\');',
+                    $_SESSION['uzenet']); // a kérdés tábla több mezőjébe is új értékeket szúr be a postokból
+                if(!$success) {
+                    $errors[] = $db_iface->report();
+                }
+                
+             //Jelenleg  hibát dob a hiányzó kep_id miatt és nem írja be az adatbázisba!!               
+
+            }
+        }
+        
+    }else{
+        alapertekkel_feltolt_form ();
+    }
+    
     if (isset($_POST["to"])) {
         $host = "ssl://smtp.gmail.com";
         $port = "465"; //465 or 8465 can also be used

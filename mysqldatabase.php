@@ -42,6 +42,7 @@ class MySQLDatabase {
 	}
 	
 	function report() { //Visszatés a MySQL hiba számmaá : MySQL hiba, hozzáfűzi az utolsó MySQL lekérdezést
+            //print "lekérd.: " . $this->last;
 		return mysql_errno($this->_connection).': '.mysql_error($this->_connection).'<br>'.$this->last;
 	}	
 }
