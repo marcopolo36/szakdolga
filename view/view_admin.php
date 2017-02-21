@@ -58,80 +58,74 @@
 					</h3>
 				</div>
 				<div class="panel-body">
-				<?php
-
-                                if(isset($_POST['action'])) {
+				<?php   if(isset($_POST['action'])) {
                                         if($_POST['action'] == 'remove') { //kvíz törlés esete
-                                                if(count($errors) != 0) {
-                                                        print 'A kérés (művelet: kvíz törlése) feldolgozása közben a következő hibák léptek föl:<br/>';
-                                                        foreach($errors as $error) //bejárjuk az errors tömböt, az aktuálos hiba $error-ba lesz tárolva
-                                                                print $error.'<br/>'; // kiíratom a hibát
-                                                } else {
-                                                        print 'Hiba nélkül működött minden<br/>';
-                                                }
-                                                print '<form method="POST"><input type="submit" value="VISSZA" name="vissza"/></form>'; //visszaléptető gomb
-                                        } elseif($_POST['action'] == 'show_quiz') {   //kvíz megjelenítés esete
-                                                print '<table border="1"><tr><td>azonosító</td><td>kérdés</td><td>válaszok</td><td>törlés</td></tr>';
-                                                foreach($kerdesek as $sor ) { //mejelenítjük a kvízt, amit törölni is tudunk
-                                                        print '<tr><td>'.$sor['id'].'</td><td>'.$sor['kerdes'].'</td><td>'.$sor['valaszok_szama'].'</td><td><form method="POST"><input type="hidden" name="action" value="remove_question"/><input type="hidden" value="'.$sor['id'].'" name="del" /><input type="submit" name="kuld" value="Törlés"/></form></td>';
-                                                }
-                                                print '</table><form method="POST"><input type="hidden" name="action" value="new_question"/><input type="hidden" name="quiz_id" value="'.$id.'"/><input type="submit" name="gomb" value="Új kérdés"/></form><form method="POST"><input type="submit" value="VISSZA" name="vissza"/></form>';
-                                        } elseif($_POST['action'] == 'create') { //új kvíz készítés
-                                                if($success !== false) {
-                                                        print 'A quizt sikeresen létrehozta!<br/><form method="POST"><input type="hidden" name="action" value="new_question"/><input type="hidden" name="quiz_id" value="'.$quiz.'"/><input type="submit" name="gomb" value="Tovább"/></form>';
-                                                } else {
-                                                        print '<form method="POST"><input type="hidden" name="action" value="create"/><label for="title">A quiz címe</label> <input type="text" name="title" value="'.((isset($_POST['title']))?$_POST['title']:'').'"/> <input type="submit" name="kuld" value="Létrehoz"/></form>';
-                                                } //üres is lehet a kvíz címe mező
-                                                print '<br/><form method="POST"><input type="submit" value="VISSZA" name="vissza"/></form>';
-                                        } elseif($_POST['action'] == 'new_question') { //új kérdést viszünk be
-                                                if($quiz === false) {//$quiz az egyik ágban bool, a másik ágban asszociációs tömb, ami a modelben definiáltam
-                                                        print 'Hiba a kérdéses quiz (id='.$_POST['quiz_id'].') nem létezik, vagy más hiba lépett fel<br/>mysql válasza: '.$db_iface->report(); //MySQL hiba kiíratása
-                                                } else {
-                                                        print 'Új kérdés hozzáadása az "'.$quiz['nev'].'" quizhez<br/>';
-                                                        if($siker) {
-                                                                print 'A kérdés sikeresen hozzáadva az adatbázishoz<br/>';
-                                                                print '<form method="POST"><input type="hidden" name="action" value="new_question"/><input type="hidden" name="quiz_id" value="'.$_POST['quiz_id'].'"/><input type="submit" name="kuld" value="+1 kérdés"/></form>';
-                                                        } else { // a kérdést nem sikerült hozzáadnia az adatbázishoz esete
+                                                if(count($errors) != 0) { ?>
+                                                        A kérés (művelet: kvíz törlése) feldolgozása közben a következő hibák léptek föl:<br/>
+                                               <?php foreach($errors as $error)?> <!-- bejárjuk az errors tömböt, az aktuálos hiba $error-ba lesz tárolva -->
+                                                        <?php  print $error; ?><br/> <!-- kiíratom a hibát -->
+                                               <?php } else { ?>
+                                                        Hiba nélkül működött minden<br/>
+                                              <?php  } ?><form method="POST"><input type="submit" value="VISSZA" name="vissza"/></form><!--visszaléptető gomb-->
+                                  <?php } elseif($_POST['action'] == 'show_quiz') {   ?> <!--kvíz megjelenítés esete-->
+                                                        <table border="1"><tr><td>azonosító</td><td>kérdés</td><td>válaszok</td><td>törlés</td></tr>
+                                         <?php  foreach($kerdesek as $sor ) { ?> <!--megjelenítjük a kvízt, amit törölni is tudunk -->
+                                                        <tr><td><?php print $sor['id']; ?></td><td><?php print $sor['kerdes']; ?></td><td><?php print $sor['valaszok_szama']; ?></td><td><form method="POST"><input type="hidden" name="action" value="remove_question"/><input type="hidden" value="<?php print $sor['id']; ?>" name="del" /><input type="submit" name="kuld" value="Törlés"/></form></td>
+                                               <?php } ?>
+                                                        </table><form method="POST"><input type="hidden" name="action" value="new_question"/><input type="hidden" name="quiz_id" value="<?php print $id ?>"/><input type="submit" name="gomb" value="Új kérdés"/></form><form method="POST"><input type="submit" value="VISSZA" name="vissza"/></form>
+                                 <?php  } elseif ($_POST['action'] == 'create') {?><!--új kvíz készítés -->
+                                      <?php     if($success !== false) { ?>
+                                                        A quizt sikeresen létrehozta!<br/><form method="POST"><input type="hidden" name="action" value="new_question"/><input type="hidden" name="quiz_id" value="<?php print $quiz; ?>"/><input type="submit" name="gomb" value="Tovább"/></form>
+                                         <?php  } else { ?>
+                                                        <form method="POST"><input type="hidden" name="action" value="create"/><label for="title">A quiz címe</label> <input type="text" name="title" value="<?php ((isset($_POST['title']))?$_POST['title']:'') ?>"/> <input type="submit" name="kuld" value="Létrehoz"/></form>
+                                          <?php } ?> <!-- üres is lehet a kvíz címe mező -->
+                                                        <br/><form method="POST"><input type="submit" value="VISSZA" name="vissza"/></form>
+                                  <?php } elseif($_POST['action'] == 'new_question') { ?> <!-- új kérdést viszünk be -->
+                                        <?php   if($quiz === false) { ?><!-- $quiz az egyik ágban bool, a másik ágban asszociációs tömb, ami a modelben definiáltam -->
+                                                        Hiba a kérdéses quiz (id= <?php print $_POST['quiz_id']; ?>) nem létezik, vagy más hiba lépett fel<br/>mysql válasza: <?php print $db_iface->report(); ?><!-- MySQL hiba kiíratása -->
+                                         <?php  } else { ?>
+                                                        Új kérdés hozzáadása az "<?php print $quiz['nev']; ?>" quizhez<br/>
+                                                <?php   if($siker) { ?>
+                                                                A kérdés sikeresen hozzáadva az adatbázishoz<br/>
+                                                                <form method="POST"><input type="hidden" name="action" value="new_question"/><input type="hidden" name="quiz_id" value="<?php print $_POST['quiz_id']; ?>"/><input type="submit" name="kuld" value="+1 kérdés"/></form>
+                                                 <?php  } else { // a kérdést nem sikerült hozzáadnia az adatbázishoz esete
                                                                 if(isset($errors)) {
-                                                                        foreach($errors as $error) {
-                                                                                print "<b><font color=\"red\">$error</b></font>";
-                                                                        }
-                                                                }
-                                                                print '<form method="POST"><input type="hidden" name="action" value="new_question"/><input type="hidden" name="quiz_id" value="'.$_POST['quiz_id'].'"/>';
-                                                                print '<label for="kerdes">A kérdés: </label><input type="text" id="kerdes" name="kerdes" value="'.((isset($_POST['kerdes']))?$_POST['kerdes']:'').'"/><br/>'; // a sikertelenül elküldött formból postolt kerdesek
-                                                                print '<input type="hidden" name="valaszok" value="'.count($valaszok).'"/>';
-                                                                print '<table border="1">';
-                                                                foreach($valaszok as $key => $valasz) {
-                                                                        $helyes = (isset($_POST['helyes']) && $_POST['helyes'] == $key)?' checked':''; //megjegyezte a helyes választ 
-                                                                        print '<tr><td><input type="radio" name="helyes" value="'.$key.'"'.$helyes.'/></td><td><input type="text" name="valasz_'.$key.'" value="'.$valasz.'"/></td></tr>'; //és bejelőli a radio gombját
-                                                                }
-                                                                print '</table><br/><input type="submit" name="sent" value="Mehet"/> vagy <input type="submit" name="kerekmeg" value="+1 egy válaszlehetőség"/></form>';
-                                                        }	//ha nem sikerült kérdést elküldeni, akkor megjeleníti, hogy most elküldheted vagy új kérdést tehetsz fel
-                                                }
-
-                                                print '<form method="POST"><input type="submit" value="VISSZA" name="vissza"/></form>';
-                                        } elseif($_POST['action'] == 'remove_question') { //kérdés törlése esete, amikor nem sikerült
-                                                if(count($errors) != 0) {
-                                                        print 'A kérés (művelet: kvíz törlése) feldolgozása közben a következő hibák léptek föl:<br/>';
-                                                        foreach($errors as $error)
-                                                                print $error.'<br/>';
-                                                } else {
-                                                        print 'Hiba nélkül működött minden<br/>';
-                                                }
-                                                print '<form method="POST"><input type="submit" value="VISSZA" name="vissza"/></form>';
-                                        } else {
-                                                print '<form method="POST">Ismeretlen művelet ('.$_POST['action'].') <input type="submit" value="VISSZA" name="vissza"/></form>';// elvileg felesleges
-                                        }
-                                } else { //kvíz lista megjelenítésének esete
-                                        print '<table border="1"><tr><td>azonosító</td><td>cím</td><td>kérdések</td><td>műveletek</td></tr>';
-                                        foreach($kvizek as $sor){
-                                                print '<tr><td>'.$sor['id'].'</td><td>'.$sor['title'].'</td><td>'.$sor['kerdes_szam'].' db</td><td><form method="POST"><input type="hidden" name="action" value="remove"/><input type="hidden" value="'.$sor['id'].'" name="del" /><input type="submit" name="kuld" value="Törlés"/></form><form method="POST"><input type="hidden" name="action" value="show_quiz"/><input type="hidden" value="'.$sor['id'].'" name="quiz_id" /><input type="submit" name="kuld" value="Szerkesztés"/></form></td></tr>';
-                                                //a kvíz id-ját, a kvíz címét és a kvízhez tartozó kérdések számát is kiírja
-                                        }
-                                        print '</table><form method="POST"><input type="hidden" name="action" value="create"/><input type="submit" name="send" value="Új"/></form>';
-                                }
-
-                                ?>	
+                                                                        foreach($errors as $error) { ?>
+                                                                                <b><font color=\"red\"><?php $error ?></b></font>
+                                                            <?php       }
+                                                                } ?>
+                                                                        <form method="POST"><input type="hidden" name="action" value="new_question"/><input type="hidden" name="quiz_id" value="<?php print $_POST['quiz_id']; ?>"/>
+                                                                        <label for="kerdes">A kérdés: </label><input type="text" id="kerdes" name="kerdes" value="<?php print ((isset($_POST['kerdes']))?$_POST['kerdes']:''); ?>"/><br/> <!-- a sikertelenül elküldött formból postolt kerdesek -->
+                                                                        <input type="hidden" name="valaszok" value="<?php print count($valaszok); ?>"/>
+                                                                        <table border="1">
+                                                          <?php foreach($valaszok as $key => $valasz) { ?>
+                                                           <?php  print $helyes = (isset($_POST['helyes']) && $_POST['helyes'] == $key)?' checked':'' ;?><megjegyezte a helyes választ 
+                                                                        <tr><td><input type="radio" name="helyes" value="<?php print $key; ?>"<?php print $helyes; ?>/></td><td><input type="text" name="valasz_<?php print $key; ?>" value="<?php print $valasz; ?>"/></td></tr> <!-- és bejelőli a radio gombját -->
+                                                        <?php   } ?>
+                                                                        </table><br/><input type="submit" name="sent" value="Mehet"/> vagy <input type="submit" name="kerekmeg" value="+1 egy válaszlehetőség"/></form>
+                                                 <?php  } ?>	<!-- nem sikerült kérdést elküldeni, akkor megjeleníti, hogy most elküldheted vagy új kérdést tehetsz fel -->
+                                           <?php } ?>
+                                                        <form method="POST"><input type="submit" value="VISSZA" name="vissza"/></form>
+                                  <?php } elseif($_POST['action'] == 'remove_question') { //kérdés törlése esete, amikor nem sikerült
+                                                if(count($errors) != 0) { ?>
+                                                        A kérés (művelet: kvíz törlése) feldolgozása közben a következő hibák léptek föl:<br/>
+                                                  <?php foreach($errors as $error)
+                                                                print $error; ?><br/>
+                                          <?php } else { ?>
+                                                       Hiba nélkül működött minden<br/>
+                                          <?php } ?>
+                                                       <form method="POST"><input type="submit" value="VISSZA" name="vissza"/></form>
+                                 <?php  } else { ?>
+                                                       <form method="POST">Ismeretlen művelet (<?php print $_POST['action']; ?>) <input type="submit" value="VISSZA" name="vissza"/></form> <!-- elvileg felesleges -->
+                                <?php   } ?>
+                          <?php } else { ?> <!--kvíz lista megjelenítésének esete-->
+                                                <table border="1"><tr><td>azonosító</td><td>cím</td><td>kérdések</td><td>műveletek</td></tr>
+                                <?php  foreach($kvizek as $sor){  ?>
+                                                       <tr><td><?php print $sor['id']; ?></td><td><?php print $sor['title']; ?></td><td><?php print $sor['kerdes_szam']; ?> db</td><td><form method="POST"><input type="hidden" name="action" value="remove"/><input type="hidden" value="<?php print $sor['id']; ?>" name="del" /><input type="submit" name="kuld" value="Törlés"/></form><form method="POST"><input type="hidden" name="action" value="show_quiz"/><input type="hidden" value="<?php print $sor['id']; ?>" name="quiz_id" /><input type="submit" name="kuld" value="Szerkesztés"/></form></td></tr>
+                                                <!-- a kvíz id-ját, a kvíz címét és a kvízhez tartozó kérdések számát is kiírja -->
+                                 <?php  }  ?>
+                                               </table><form method="POST"><input type="hidden" name="action" value="create"/><input type="submit" name="send" value="Új"/></form>
+                        <?php   } ?>	
 				</div>
 			</div>
 

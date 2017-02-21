@@ -91,6 +91,7 @@
               )
         );
         */
+  //1.állapot    
 	$new_question;	
 	if($finished) { // ha befejeztük a kvízt
 		foreach($answers as $q_id => $a_id) { // bejárjuk az asszociatív $answer tömbot, ahol az aktuális párból $q_id tárolja a kulcsot és $a_id az értéket
@@ -114,7 +115,7 @@
                             $helyesek++;
                         }
 		}
-	} else { //ha nincs befejezve a kvíz
+	} else { //ha nincs befejezve a kvíz -- 2. állapot
 		/*mutassuk a következő kérdést*/
 		//a kérdéshez tartozó válaszokat töltjük be
                                   

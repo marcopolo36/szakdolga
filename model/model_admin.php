@@ -91,7 +91,7 @@ if(isset($_POST['action'])) {
                     $success = $db_iface->query('INSERT INTO `{PREFIX}promocio` (`id`, `nev`) VALUES (NULL, \'{TITLE}\');',array('TITLE'=>$_POST['title'])); // a \ mindig a következő karakterre vonatkozik
                 }
                 if($success !== false) {
-                    $quiz = $db_iface->insert_id(); //az adatbázisba beszúr egy új id-t
+                    $quiz = $db_iface->last_inserted_id(); //az adatbázisba beszúr egy új id-t
                 } else {
                     print $db_iface->report();
                 } //üres is lehet a kvíz címe mező
@@ -125,7 +125,7 @@ if(isset($_POST['action'])) {
                                                 $success = $db_iface->query('INSERT INTO `{PREFIX}kerdes` (`id`, `promocio_id`, `szoveg`) VALUES (NULL, \'{QUIZ}\', \'{KERD}\');',array('QUIZ'=>$_POST['quiz_id'],'KERD'=>$_POST['kerdes'])); // a kérdés tábla több mezőjébe is új étékeket szúr be a postokból
                                                 if(!$success) $errors[] = $db_iface->report();
                                                 else {
-                                                        $kerdes_id = $db_iface->insert_id(); //,?? csak egy id-t használ
+                                                        $kerdes_id = $db_iface->last_inserted_id(); //,?? csak egy id-t használ
                                                         foreach($valaszok as $key => $valasz) { //végig megy a válasz tömbbön, hogy id-vel is lehessen hivatkozni rá
                                                                 $succes = $db_iface->query('INSERT INTO `{PREFIX}valasz` (`id`, `kerdes_id`, `szoveg`, `helyes`) VALUES (NULL, \'{KERD}\', \'{VAL}\', \'{HE}\');',array('KERD'=>$kerdes_id,'VAL'=>$valasz,'HE'=>(($key==$_POST['helyes'])?1:0))); //adatbázisban beszúrja a válasz táblába az étékeket postból és beállítja, hogy helyes-e
                                                                 if(!$success) $errors[] = $db_iface->report(); //kiíratjuk a MySQL hibát

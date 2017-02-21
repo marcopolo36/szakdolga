@@ -37,7 +37,7 @@ class MySQLDatabase {
 		return ($result) ? mysql_num_rows($result) : 0; //
 	}
 	
-	function insert_id() { //az adatbázisba beszúr egy id-t
+	function last_inserted_id() { //az adatbázisba utoljára beszúrt id-t adja vissza
 		return mysql_insert_id($this->_connection);
 	}
 	

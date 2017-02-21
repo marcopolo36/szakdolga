@@ -27,7 +27,7 @@ class MySQLDatabase {
 		return ($result)?mysql_num_rows($result):0;
 	}
 	
-	function insert_id() {
+	function last_inserted_id() {
 		return mysql_insert_id($this->_connection);
 	}
 	
@@ -231,7 +231,7 @@ function quiz_admin() {
 			   $success = $db_iface->query('INSERT INTO `{PREFIX}kviz` (`id`, `title`) VALUES (NULL, \'{TITLE}\');',array('TITLE'=>$_POST['title']));
 			}
 			if($success !== false) {
-				$quiz = $db_iface->insert_id();
+				$quiz = $db_iface->last_inserted_id();
 				print 'A quizt sikeresen l�trehozta!<br/><form method="POST"><input type="hidden" name="action" value="new_question"/><input type="hidden" name="quiz_id" value="'.$quiz.'"/><input type="submit" name="gomb" value="Tov�bb"/></form>';
 			} else {
 				print '<form method="POST"><input type="hidden" name="action" value="create"/><label for="title">A quiz c�me</label> <input type="text" name="title" value="'.((isset($_POST['title']))?$_POST['title']:'').'"/> <input type="submit" name="kuld" value="L�trehoz"/></form>';
@@ -277,7 +277,7 @@ function quiz_admin() {
 						} else {
 							$success = $db_iface->query('INSERT INTO `{PREFIX}kerdes` (`id`, `kviz`, `kerdes`) VALUES (NULL, \'{QUIZ}\', \'{KERD}\');',array('QUIZ'=>$_POST['quiz_id'],'KERD'=>$_POST['kerdes']));
 							if(!$success) $errors[] = $db_iface->report(); else {
-							$kerdes_id = $db_iface->insert_id();
+							$kerdes_id = $db_iface->last_inserted_id();
 							foreach($valaszok as $key => $valasz) {
 								$succes = $db_iface->query('INSERT INTO `{PREFIX}valasz` (`id`, `kerdes`, `valasz`, `helyes`) VALUES (NULL, \'{KERD}\', \'{VAL}\', \'{HE}\');',array('KERD'=>$kerdes_id,'VAL'=>$valasz,'HE'=>(($key==$_POST['helyes'])?1:0)));
 								if(!$success) $errors[] = $db_iface->report();

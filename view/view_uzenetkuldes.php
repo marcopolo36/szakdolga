@@ -54,40 +54,40 @@
                                     <?php } ?>
                                     <p>Kérdés hozzáadása a titkos üzenethez kvízjátékkal</><br/>
                                     <form method="POST"><input type="hidden" name="action" value="new_message"/>
-                                    <label for="kerdes">A kérdés: </label><input type="text" id="kerdes" name="kerdes" value=""/><br/>
+                                    <label for="kerdes">A kérdés: </label><input type="text" id="kerdes" name="kerdes" value="<?php print $_SESSION['uzenet']['KERDES'];  ?>"/><br/>
                                     <label for="valaszok">A válaszok helye 1-3-ig, a helyes választ jelőld be! </label>
                                     <input type="hidden" name="valaszok" value="2"/>
                                     <table border="1"><tr>
-                                            <td><input type="radio" name="helyes" value="0"/></td>
-                                            <td><input type="text" name="valasz_0" value=""/></td></tr>
+                                            <td><input type="radio" name="helyes" value="0" <?php if($_SESSION['uzenet']['HELYESVALASZ_SORSZAM'] == 0) print "checked='checked'"; ?>/></td>
+                                            <td><input type="text" name="valasz_0" value="<?php print $_SESSION['uzenet']['VALASZ_1'];  ?>"/></td></tr>
                                             <tr>
-                                            <td><input type="radio" name="helyes" value="1"/></td><td>
-                                            <input type="text" name="valasz_1" value=""/></td>
+                                            <td><input type="radio" name="helyes" value="1" <?php if($_SESSION['uzenet']['HELYESVALASZ_SORSZAM'] == 1) print "checked='checked'"; ?>/></td><td>
+                                            <input type="text" name="valasz_1" value="<?php print $_SESSION['uzenet']['VALASZ_2'];  ?>"/></td>
                                             </tr>
-                                            <td><input type="radio" name="helyes" value="2"/></td><td>
-                                            <input type="text" name="valasz_2" value=""/></td>
+                                            <td><input type="radio" name="helyes" value="2" <?php if($_SESSION['uzenet']['HELYESVALASZ_SORSZAM'] == 2) print "checked='checked'"; ?>/></td><td>
+                                            <input type="text" name="valasz_2" value="<?php print $_SESSION['uzenet']['VALASZ_3'];  ?>"/></td>
                                             </tr>
                                             </table><br/>
                                             <p>Titkos üzeneted szövege, amit a helyes válasz megadása után olvashat el a címzett (30 karakter): </p>
-                                            <textarea name="t_uzenet" id="t_uzenet"></textarea><br/>
+                                            <textarea name="t_uzenet" id="t_uzenet"><?php print $_SESSION['uzenet']['T_UZENET']; ?></textarea><br/>
                                             <p>&nbsp;</p>
                                           <!--< <form method="post" enctype="multipart/form-data" name="form1" id="form1">-->
                                              <p>A te keresztneved: 
-                                              <input type="text" name="firstname" id="firstname" />
+                                              <input type="text" name="firstname" id="firstname" text="<?php print $_SESSION['uzenet']['KERESZTNEV_KULDO']; ?>"/>
                                             </p>
                                              <p>Címzett email címe: 
-                                              <input type="text" name="to" id="to" />
+                                              <input type="text" name="to" id="to" value="<?php print $_SESSION['uzenet']['EMAILCIM']; ?>"/>
                                             </p>
                                              <p>&nbsp;</p>
-                                            <p>Képre írt üdvözlő üzenet szövege (15 karakter): <input type="text" name="szoveg" id="szoveg" /></p>
+                                            <p>Képre írt üdvözlő üzenet szövege (15 karakter): <input type="text" name="szoveg" id="szoveg" value="<?php print $_SESSION['uzenet']['SZOVEG']; ?>" /></p>
                                                  <p>&nbsp;</p>                                 
                                               <p>A kiválasztandó kép: </p>
 
-                                              <input type="radio" name="picture" value="1"><img src="images/nevnap.jpg" alt="kep1" style="width:97px;height:69px;"><br>
+                                              <input type="radio" name="picture" value="1" <?php if($_SESSION['uzenet']['PICTURE_NUM'] == 1) print "checked='checked'"; ?>><img src="images/nevnap.jpg" alt="kep1" style="width:97px;height:69px;"><br>
                                               <p>&nbsp;</p>
-                                              <input type="radio" name="picture" value="2"><img src="images/szulinap.jpg" alt="kep2" style="width:97px;height:69px;"><br>
+                                              <input type="radio" name="picture" value="2" <?php if($_SESSION['uzenet']['PICTURE_NUM'] == 2) print "checked='checked'"; ?>><img src="images/szulinap.jpg" alt="kep2" style="width:97px;height:69px;"><br>
                                               <p>&nbsp;</p>
-                                              <input type="radio" name="picture" value="3"><img src="images/valentinnap.jpg" alt="kep3" style="width:97px;height:69px;"><br>
+                                              <input type="radio" name="picture" value="3" <?php if($_SESSION['uzenet']['PICTURE_NUM'] == 3) print "checked='checked'"; ?>><img src="images/valentinnap.jpg" alt="kep3" style="width:97px;height:69px;"><br>
                                               <p>&nbsp;</p>
                                               <p><input type="submit" name="sent" id="button" value="Küldés"  </p> 
                                     </form>
