@@ -52,44 +52,35 @@
 
 
 
-    <div class="quiz"><h1><?php print $promotion_nev; ?></h1>
-    
-    <?php if($finished) { // ha befejeztük a kvízt ?>          
-                Gratulálok<br />Sikeresen teljesítetted a kvízt
-		<table border="1">
-		<tr><td><b>A kérdés</b></td><td><b>Az ön által adott válasz</b></td><td><b>A helyes válasz</b></td></tr>
-		<?php foreach($solutions as $question => $two_answers) { // bejárjuk az asszociatív $soluiton tömbot, ahol az aktuális párból $question tárolja a kulcsot (a kérdés szövegét) és az $two_answers a megadott és a helyes válasz szövegeit ?>
-                        <?php if(isset($two_answers["helyes_valasz"])) { //ha az adatbázis logikai változója igaz (1) ?>
-                                <tr><td><?php print $question; ?></td><td><font color="red"><?php print $two_answers["valasz"];?></font></td><td><?php print $two_answers["helyes_valasz"]; ?></td></tr> <!-- a válaszokat ha helyes zöld színre váltja, ha hamis pirosra -->
-			<?php } else { ?><!-- //különben az adatbázisból kiszedjük a helyes választ -->
-				 <tr><td><?php print $question; ?></td><td><font color="green"><?php print $two_answers["valasz"] ;?></font></td><td>Helyes válasz</td></tr><!-- a válaszokat ha helyes zöld színre váltja, ha hamis pirosra -->
-                        <?php } ?> 
-                <?php } ?>      
-		</table><br>
-                <?php $ossz = count($solutions); ?>
-                <?php $szazalek = round(($helyesek/$ossz)*100,2); //a százalékunk egy kerekített egész szám lesz 0-100 közözött ?>
-                <font size="2em"><b> <?php print $helyesek; ?> helyes válasza volt <?php print $szazalek; ?> % teljesítmény</b></font>
-		<form method="POST"><input type="submit" name="reset_quiz" value="Töröl"/></form>
-    <?php } else { //ha nincs befejezve a kvíz
-		/* példa tömb kiíratására a megjelenítésnél
-		print "new_question: ";
-                print "<pre>";
-                print_r($new_question);
-                print "<\pre>";*/
-                /*mutassuk a következő kérdést*/ ?>
-		<form method="POST"><input type="hidden" name="question" value="<?php  print $new_question["question_id"]; ?>"/><!--  rejtett mezőben a formból megszerezzük a kérdés id-jét -->
-		<h2><?php print $new_question["question_text"]; ?></h2><?php ++$question_num/$question_num_all; ?> kérdés<br/> <!--  a hozzá tartozó kérdés szöveget, a megválaszolt kérdések számát növeljük -->
-		<?php if(isset($error)) ?> <!-- hiba az előző kérdéskor -- $error /ha van hiba, akkor kiíratjuk a hiba tömbünkből -->
-		<!-- a kérdéshez tartozó válaszokat töltjük be -->
-		<?php foreach($new_question["answers"] as $answer_id => $answer_text) { ?>
-			<input type="radio" name="answer" value="<?php print $answer_id; ?>"/> <?php print $answer_text; ?><br /><!-- kiíratjuk a kérdéshez tartozó válaszokat -->
-		<?php } ?>
-		<input type="submit" value="TOVÁBB"/> <input type="submit" name="reset_quiz" value="Töröl"/></form><!--kiíratjuk a TOVÁBB és TÖRÖL gombot -->
-    <?php } ?>
+    <div class="quiz"><h1><?php print $_SESSION["lekerdezes"]['kerdes']; ?></h1>
+    <?php if($_SESSION["allapot"] == "kerdes_form") { ?> <!-- 1. állapot kérdés - válasz -->
+                <form method="POST">
+		<input type="radio" name="valasz" value="0"/> <?php print $_SESSION["lekerdezes"]['valasz_1']; ?><br /><!-- kiíratjuk a kérdéshez tartozó válaszokat -->
+		<input type="radio" name="valasz" value="1"/> <?php print $_SESSION["lekerdezes"]['valasz_2']; ?><br />
+                <input type="radio" name="valasz" value="2"/> <?php print $_SESSION["lekerdezes"]['valasz_3']; ?><br />
+                <input type="submit" value="TOVÁBB"/></form>
+    <?php  } else { ?> <!-- 2. állapot - keresztnév -->
+           <?php if ($_SESSION["allapot"] == "keresztnev_form" && isset($_SESSION['nev_probalkozas']) && $_SESSION['nev_probalkozas'] < 3 ){ ?> 
+               <p>Helyesen válaszoltál a kérdésre! Add meg még az üzeneted küldő személy keresztnevét (nem a becenevét!), hogy elolvashassad a titkos üzenetedet </br>
+                   Ne feledd csak 3 lehetőséged van!</p>
+                <form method="POST">
+                <input type="text" name="keresztnev" value=""><br />
+                <input type="submit" value="TOVÁBB"/></form>
+           <?php  } elseif($_SESSION["allapot"] == 'email_form') { ?>
+                     <p>Titkos üzeneted:</><br/>
+                         <?php print $_SESSION["lekerdezes"]['t_uzenet']; ?>
+                     <p>Szeretnél válaszolni?</><br/>
+                     <form method="POST" action="index.php?site=regisztracio">
+                     <input type="submit" value="Igen"/></form>               
+           <?php  } elseif($_SESSION["allapot"] == "sikertelen") { ?>
+                     <p>Sajnos elfogyott próbálkozásaid száma, lemaradtál a titkos üzenetről!</p>
+           <?php  } else { ?>
+                     <p>Sajnos hiba történt</p>
+           <?php  } ?> 
+                    
+       <?php }?>
 	</div>
-        
-
-      
+             
             
 <!-- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! -->
 

@@ -13,7 +13,7 @@
 		);
 	$page_main_title = "Titkos üzeneted kvízjátéka!";
 	$page_content = "";
-        
+
         $uzenet_id;
         if(isset($_GET["uzenet_id"])) {
             $uzenet_id = $_GET["uzenet_id"];
@@ -23,7 +23,8 @@
         
         $db_iface = new MySQLDatabase();
 
-        if(!isset($_POST['valasz'])) { // 1. állapot: form kitöltése
+        if(! isset($_POST['valasz']) && ! isset($_SESSION["allapot"])) { // 1. állapot: form kitöltése (első megjelenés)
+            $_SESSION["allapot"] = "kerdes_form";
             $result = $db_iface->query(
                 'SELECT * FROM `{PREFIX}uzenet` WHERE `{PREFIX}uzenet`.`id`={ID};',
                 array('ID'=>$uzenet_id));
@@ -33,78 +34,30 @@
                     return;
             }
             $row = mysql_fetch_assoc($result); //üzenet adattábla egy sorát adja vissza, betöltöm egy asszociációs tömmbe utána kulcs és érték párokat rendelek hozzá
-        } else { // 2. állapot: a válaszok kiértékelés
-            // TODO
+            $_SESSION["lekerdezes"] = array(
+		"id"=>$row["id"], 
+		"kuldo_felhasznalo_id"=>$row["kuldo_felhasznalo_id"],
+		"emailcim"=>$row["emailcim"],
+		"keresztnev_kuldo"=>$row["keresztnev_kuldo"],
+                "kerdes"=>$row["kerdes"],
+                "valasz_1"=>$row["valasz_1"],
+                "valasz_2"=>$row["valasz_2"],
+                "valasz_3"=>$row["valasz_3"],
+                "helyesvalasz_sorszam"=>$row["helyesvalasz_sorszam"],
+                "t_uzenet"=>$row["t_uzenet"],
+                "kep_id"=>$row["kep_id"]
+		);            
+        } elseif ($_SESSION["allapot"] == "kerdes_form"){ // 1. állapot küldés után
+            if(strcmp($_POST['valasz'], $_SESSION["lekerdezes"]["helyesvalasz_sorszam"]) == 0) { //string összehasonlítás
+                $_SESSION["allapot"] = "keresztnev_form"; // 2. állapot-ba kerül
+                $_SESSION["nev_probalkozas"] = 0;
+            }
+        } elseif ($_SESSION["allapot"] == "keresztnev_form"){ // 2. állapot
+            ++$_SESSION["nev_probalkozas"];
+            if(strcmp($_POST['keresztnev'], $_SESSION["lekerdezes"]["keresztnev_kuldo"]) == 0) { //string összehasonlítás
+                $_SESSION["allapot"] = "email_form"; // 3/a. állapotba kerül
+            } else if($_SESSION["nev_probalkozas"] >= 3) {
+                $_SESSION["allapot"] = "sikertelen"; // 3/b. állapotba kerül
+            }
         }
-        
-        /*
-
-	} else {
-		$answers = &$_SESSION['quiz-'.$promotion_id]; // $answers álneve lett a $_SESSION['quiz-'.$id] munkamenetváltozónak
-	
-		//A beérkező válasz feldolgozása
-		if(isset($_POST['answer']) && is_numeric($_POST['answer']) &&
-		   isset($_POST['question']) && is_numeric($_POST['question']) &&
-		   $db_iface->num_rows('SELECT * FROM `{PREFIX}valasz` WHERE `id`={ANSWER} AND `kerdes_id`={QUESTION};'
-						 ,array('ANSWER'=>$_POST['answer'],'QUESTION' =>$_POST['question'])) != 0) { //a Post-ból érkező számot beírja az adatbázisba és úgy hajtja végre az SQL lekérdezést
-			//létezik ez a kérdés és a válasz, és összetartoznak
-			if(isset($answers[$_POST['question']])) { // a tömbben már létezik kulcs érték pár
-				$error = 'Ez furcsa, egyszer már válaszoltál erre a kérdésre, na sebaj';
-			}
-			$answers[$_POST['question']] = $_POST['answer'];//???
-		} else {
-			$error = 'Nem létezik a kérdés, vagy a válasz, vagy nem tartoznak össze';
-		}
-	}
-		
-	if($finished) { // ha befejeztük a kvízt
-		foreach($answers as $q_id => $a_id) { // bejárjuk az asszociatív $answer tömbot, ahol az aktuális párból $q_id tárolja a kulcsot és $a_id az értéket
-			//a kérdés címe
-			$result = $db_iface->query('SELECT * FROM `{PREFIX}kerdes` WHERE `id`={Q_ID};',array('Q_ID'=>$q_id));
-			$result = mysql_fetch_assoc($result);
-			if($result['promocio_id'] != $promotion_id) {
-                            die ('Munkamenet kezelési hiba!'); //ellenőrzés (ha az előző kvízből benne maradt volna egy kérdés a sessionben, akkor meghal a program)
-                        }
-                        $kerdes_szoveg = $result['szoveg'];
-			//a válaszod
-			$result = mysql_fetch_assoc($db_iface->query('SELECT * FROM `{PREFIX}valasz` WHERE `id`={A_ID};',array('A_ID'=>$a_id)));
-			$valasz = $result['szoveg'];
-			$solutions[$kerdes_szoveg] = array();//asszociációs tömb, aminek egyik eleme egy másik tömb, aminek minden eleméhez egy válasz (psotból) és helyes válasz(adatbázisból) szövege tartozik
-                        $solutions[$kerdes_szoveg]["valasz"] = $valasz;//kiíratni, hogy lássam
-			if(! $result['helyes']) {  //ha nem helyes a válasz, akkor adatbázisból kiszedjük a helyes választ
-				$result = mysql_fetch_assoc($db_iface->query('SELECT * FROM `{PREFIX}valasz` WHERE (`kerdes_id`={Q_ID} AND `helyes` = 1);',array('Q_ID'=>$q_id)));
-				$solutions[$kerdes_szoveg]["helyes_valasz"] = $result['szoveg'];//példa feljebb
-			}
-                        else {
-                            $helyesek++;
-                        }
-		}
-	} else { //ha nincs befejezve a kvíz
-		/*mutassuk a következő kérdést*/
-		//a kérdéshez tartozó válaszokat töltjük be
-                                  
-                // példa a solution-ra
-               /* $new_question = array(
-                        "question_id" => 23,
-                        "question_text" => "Ki vagy te?",
-                        "answers" => array(
-                            3 => "Én",
-                            5 => "Te",
-                            10 => "Ő",
-                            13 => "Mi",
-                            11 => "Ti",
-                            41 => "Ők"
-                        )
-                );
-                *//*
-                $new_question["question_id"] = $question_id;
-                $new_question["question_text"] = $question_text;
-                $new_question["answers"] = array();
-		$result = $db_iface->query('SELECT * FROM `{PREFIX}valasz` WHERE `{PREFIX}valasz`.`kerdes_id`={QID};',array('QID'=>$question_id)); //adatbázisból megszerezzük a kérdéshez tartozó válaszokat
-		while($row = mysql_fetch_assoc($result)) {
-                    $answer_id = $row['id'];
-                    $new_question["answers"][$answer_id] = $row['szoveg']; // a $new_question-nak van egy "answers" tömbje, ami answereket tárol. 1-1 answer pedig egy olyan tömb, ami tárol 1 id-t és egy szöveget
-		}
-	}*/
-        
 ?>
