@@ -33,8 +33,7 @@
 						foreach($menu as $link => $link_text) {
 							?><li><a href="index.php?site=<?php echo $link; ?>"><?php echo $link_text; ?></a></li><?php
 						}
-                                                ?>
-                                                <li><a href="index.php?site=kijelentkezes">Kijelentkezés</a></li>	
+                                                ?>	
 				  </ul>
 				</div>
 			  </div>

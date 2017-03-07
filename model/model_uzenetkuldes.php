@@ -1,10 +1,14 @@
-<?php
+﻿<?php
     include('Mail.php');
     include('Mail/mime.php');
-    include('mysqldatabase.php');
+  
+    $page_title = "Kvíz";
+    $menu = getMenu();
+    $page_main_title = "Titkos üzeneted kvízjátéka!";
+    $page_content = "";
 
     $db_iface = new MySQLDatabase(); 
-    $test_user_id = 1; //Autentikációt meg kell írni
+    $test_user_id = 1; // TODO: Autentikációt meg kell írni
     $kep_id;
     $uzenet_id;
     
@@ -83,22 +87,29 @@
             $subject = "Titkos üzeneted érkezett";
             $url = "http://localhost/szakdolga/index.php?site=titkos&uzenet_id=" . $uzenet_id ;
             $text = $_POST["szoveg"] ."\n Titkos üzenetedet itt olvashatod el: ". $url ;
-            $html = "<html><body>".$_POST["szoveg"]."<br><a href='" . $url ."'>Titkos üzenetedet itt olvashatod el</a></body></html>";
+            $html = "<html lang='hu'><body>".$_POST["szoveg"]."<br/><a href='" . $url ."'> ***Titkos üzenetedet itt olvashatod el</a></body></html>";
             $crlf = "\n";
             $headers = array (
+				"Content-Type" => "text/html; charset=UTF-8",
                 "From" => $from,
                 "To" => $to,
                 "Subject" => $subject);
             $mime = new Mail_mime($crlf);
             $mime->setTXTBody($text);
-            $mime->setHTMLBody($html);            
+            $mime->setHTMLBody($html);
+			$mime_params = array(
+			  'text_encoding' => '7bit',
+			  'text_charset'  => 'UTF-8',
+			  'html_charset'  => 'UTF-8',
+			  'head_charset'  => 'UTF-8'
+			);			
             //email küldés
             
             $picture_path = $picture_dir . $kep_id . ".jpg";
             $mime->addAttachment($picture_path);  // hozzáfűzés a levélhez
             
             // űrlapról érkező fájl becsatolása vége
-            $body = $mime->get();
+            $body = $mime->get($mime_params);
             //die($body);
             $headers = $mime->headers($headers);
             $smtp = Mail::factory("smtp", array (

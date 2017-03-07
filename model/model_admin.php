@@ -1,16 +1,8 @@
 <?php
 $page_title = "Adminisztrációs oldal";
-	$menu = array(
-		"kezdolap"=>"Kezdőlap", 
-		"regisztracio"=>"Regisztráció",
-		"uzenetkuldes"=>"Üzenetküldés",
-		"kvizjatek"=>"Kvízjáték",
-                "kapcsolat"=>"Kapcsolat",
-                "bejelentkezes"=>"Bejelentkezés",
-                "admin"=>"Adminisztráció"
-		);
-        $page_main_title = "Adminisztrációs oldal!";
-	$page_content = "Adminisztrációs oldal tartalma";
+$menu = getMenu();
+$page_main_title = "Adminisztrációs oldal!";
+$page_content = "Adminisztrációs oldal tartalma";
 
 //admin funkció
 function remove_quiz($id) { //egy megadott id-jú kvízt töröl
@@ -63,7 +55,6 @@ function search($value) { //kulcsot keres a postolt értékekben
 	return $keys_selected;
 }
 
-include('mysqldatabase.php');
 //innen kezdődik a kód
 $db_iface = new MySQLDatabase(); //MINDEN MODELBE KELL HA NINCS MÉG BENNE!!!!!!!!!!!!!!!!
 if(isset($_POST['action'])) {
@@ -88,7 +79,7 @@ if(isset($_POST['action'])) {
         } elseif($_POST['action'] == 'create') { //új kvíz készítés
                 $success = false;
                 if(isset($_POST['title']) && !empty($_POST['title'])) {
-                    $success = $db_iface->query('INSERT INTO `{PREFIX}promocio` (`id`, `nev`) VALUES (NULL, \'{TITLE}\');',array('TITLE'=>$_POST['title'])); // a \ mindig a következő karakterre vonatkozik
+                    $success = $db_iface->query('INSERT INTO `{PREFIX}promocio` (`id`, `nev`, `leiras`, `datum`) VALUES (NULL, \'{TITLE}\', \'{LEIRAS}\', \'{DATUM}\');',array('TITLE'=>$_POST['title'], 'LEIRAS'=>$_POST['leiras'], 'DATUM'=>$_POST['datum'])); // a \ mindig a következő karakterre vonatkozik
                 }
                 if($success !== false) {
                     $quiz = $db_iface->last_inserted_id(); //az adatbázisba beszúr egy új id-t
@@ -122,7 +113,7 @@ if(isset($_POST['action'])) {
                                         } elseif(!isset($_POST['helyes']) || !is_numeric($_POST['helyes']) || !isset($valaszok[$_POST['helyes']])) {
                                                 $errors[] = 'Nem jelölted ki a helyes választ';
                                         } else {
-                                                $success = $db_iface->query('INSERT INTO `{PREFIX}kerdes` (`id`, `promocio_id`, `szoveg`) VALUES (NULL, \'{QUIZ}\', \'{KERD}\');',array('QUIZ'=>$_POST['quiz_id'],'KERD'=>$_POST['kerdes'])); // a kérdés tábla több mezőjébe is új étékeket szúr be a postokból
+                                                $success = $db_iface->query('INSERT INTO `{PREFIX}kerdes` (`id`, `promocio_id`, `szoveg`, `help_url`) VALUES (NULL, \'{QUIZ}\', \'{KERD}\', \'{HELP}\');',array('QUIZ'=>$_POST['quiz_id'],'KERD'=>$_POST['kerdes'], 'HELP'=>$_POST['help_url'])); // a kérdés tábla több mezőjébe is új étékeket szúr be a postokból
                                                 if(!$success) $errors[] = $db_iface->report();
                                                 else {
                                                         $kerdes_id = $db_iface->last_inserted_id(); //,?? csak egy id-t használ

@@ -84,7 +84,8 @@
 		<?php foreach($new_question["answers"] as $answer_id => $answer_text) { ?>
 			<input type="radio" name="answer" value="<?php print $answer_id; ?>"/> <?php print $answer_text; ?><br /><!-- kiíratjuk a kérdéshez tartozó válaszokat -->
 		<?php } ?>
-		<input type="submit" value="TOVÁBB"/> <input type="submit" name="reset_quiz" value="Töröl"/></form><!--kiíratjuk a TOVÁBB és TÖRÖL gombot -->
+		<input type="submit" value="TOVÁBB"/> <input type="submit" name="reset_quiz" value="Töröl"/><!--kiíratjuk a TOVÁBB és TÖRÖL gombot -->
+                <button type="button" onclick="window.open('<?php print $question_help; ?>', '_blank');">Segítség!</button></form>
     <?php } ?>
 	</div>
         

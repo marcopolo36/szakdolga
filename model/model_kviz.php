@@ -1,17 +1,8 @@
 <?php
-        include ('mysqldatabase.php');
 
 	$page_title = "Kvíz";
-	$menu = array(
-		"kezdolap"=>"Kezdőlap", 
-		"regisztracio"=>"Regisztráció",
-		"uzenetkuldes"=>"Üzenetküldés",
-		"kvizjatek"=>"Kvízjáték",
-                "kapcsolat"=>"Kapcsolat",
-                "bejelentkezes"=>"Bejelentkezés",
-                "admin"=>"Adminisztráció"
-		);
-	$page_main_title = "Kvízjáték oldal!";
+	$menu = getMenu();
+	$page_main_title = "Kvíz oldal!";
 	$page_content = "";
         
         $promotion_id = $_GET["promotion_id"];
@@ -68,11 +59,13 @@
 	//lásuk mi az első olyan kérdés amit még nem válaszoltunk meg
         $question_id;
         $question_text;
+        $question_help;
 	while($row = mysql_fetch_assoc($result)) {
 		if(!in_array($row['id'],array_keys($answers))) { //ha ez a kérdés még nem lett feltéve, kulcsok között keres
 			$finished = false;  //ha van egy megválaszolatlan kérdés, akkor még nem végeztünk
 			$question_id = $row['id'];
                         $question_text = $row['szoveg']; //felteszi a kérdést, aminek az id-jét megszereztük
+                        $question_help = $row['help_url'];
 			break;
 		}
 	}

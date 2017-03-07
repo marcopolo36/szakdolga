@@ -68,8 +68,11 @@
                                       <br><br>
                                       Jelszó: <input type="password" name="jelszo">
                                       <br><br>
-                                      <input type="submit" name="submit" value="Submit">  
+                                      <input type="submit" name="submit" value="Elküld">  
                                     </form>
+                                    <?php if($login_sikertelen) { ?>
+                                        <p style="color: red;">Sikertelen bejelentkezés</p>
+                                    <?php } ?>
                                 <?php } else { ?>
                                     <p>Üdvözlünk <?php echo $_SESSION['felhasznalo_nev'] ?>! Már be vagy jelentkezve. </p>
                                 <?php } ?>

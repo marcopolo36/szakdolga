@@ -14,6 +14,9 @@ if(isset($_GET["site"])){
         } elseif ($_GET["site"]=="kvizjatek"){
 		include("model/model_kvizjatek.php");
 		include("view/view_kvizjatek.php");
+        } elseif ($_GET["site"]=="kviz"){
+		include("model/model_kviz.php");
+		include("view/view_kviz.php");
         } elseif ($_GET["site"]=="kapcsolat"){
 		include("model/model_kapcsolat.php");
 		include("view/view_kapcsolat.php");

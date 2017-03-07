@@ -1,16 +1,6 @@
 <?php
-        include ('mysqldatabase.php');
-
 	$page_title = "Kvíz";
-	$menu = array(
-		"kezdolap"=>"Kezdőlap", 
-		"regisztracio"=>"Regisztráció",
-		"uzenetkuldes"=>"Üzenetküldés",
-		"kvizjatek"=>"Kvízjáték",
-                "kapcsolat"=>"Kapcsolat",
-                "bejelentkezes"=>"Bejelentkezés",
-                "admin"=>"Adminisztráció"
-		);
+	$menu = getMenu();
 	$page_main_title = "Titkos üzeneted kvízjátéka!";
 	$page_content = "";
 

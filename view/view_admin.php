@@ -72,12 +72,18 @@
                                          <?php  foreach($kerdesek as $sor ) { ?> <!--megjelenítjük a kvízt, amit törölni is tudunk -->
                                                         <tr><td><?php print $sor['id']; ?></td><td><?php print $sor['kerdes']; ?></td><td><?php print $sor['valaszok_szama']; ?></td><td><form method="POST"><input type="hidden" name="action" value="remove_question"/><input type="hidden" value="<?php print $sor['id']; ?>" name="del" /><input type="submit" name="kuld" value="Törlés"/></form></td>
                                                <?php } ?>
-                                                        </table><form method="POST"><input type="hidden" name="action" value="new_question"/><input type="hidden" name="quiz_id" value="<?php print $id ?>"/><input type="submit" name="gomb" value="Új kérdés"/></form><form method="POST"><input type="submit" value="VISSZA" name="vissza"/></form>
+                                                        </table><form method="POST"><input type="hidden" name="action" value="new_question"/><input type="hidden" name="quiz_id" value="<?php print $id; ?>"/><input type="submit" name="gomb" value="Új kérdés"/></form><form method="POST"><input type="submit" value="VISSZA" name="vissza"/></form>
                                  <?php  } elseif ($_POST['action'] == 'create') {?><!--új kvíz készítés -->
                                       <?php     if($success !== false) { ?>
                                                         A quizt sikeresen létrehozta!<br/><form method="POST"><input type="hidden" name="action" value="new_question"/><input type="hidden" name="quiz_id" value="<?php print $quiz; ?>"/><input type="submit" name="gomb" value="Tovább"/></form>
                                          <?php  } else { ?>
-                                                        <form method="POST"><input type="hidden" name="action" value="create"/><label for="title">A quiz címe</label> <input type="text" name="title" value="<?php ((isset($_POST['title']))?$_POST['title']:'') ?>"/> <input type="submit" name="kuld" value="Létrehoz"/></form>
+                                                        <form method="POST"><input type="hidden" name="action" value="create"/>
+                                                        <label for="title">A kvíz címe</label> <input type="text" name="title" value="<?php print ((isset($_POST['title']))?$_POST['title']:''); ?>"/> <br/>
+                                                        A kvíz lejárati dátuma: <br/>
+                                                        <input type="date" name="datum" value="<?php print ((isset($_POST['datum']))?$_POST['datum']:''); ?>"> <br/>
+                                                        A kvíz leírása: <br/>
+                                                        <textarea name="leiras" rows="10" cols="30"><?php print ((isset($_POST['leiras']))?$_POST['leiras']:''); ?></textarea><br/>
+                                                        <input type="submit" name="kuld" value="Létrehoz"/></form>
                                           <?php } ?> <!-- üres is lehet a kvíz címe mező -->
                                                         <br/><form method="POST"><input type="submit" value="VISSZA" name="vissza"/></form>
                                   <?php } elseif($_POST['action'] == 'new_question') { ?> <!-- új kérdést viszünk be -->
@@ -95,6 +101,7 @@
                                                             <?php       }
                                                                 } ?>
                                                                         <form method="POST"><input type="hidden" name="action" value="new_question"/><input type="hidden" name="quiz_id" value="<?php print $_POST['quiz_id']; ?>"/>
+                                                                        <label for="help">A segítség url: </label><input type="text" id="kerdes" name="help_url" value="<?php print ((isset($_POST['help_url']))?$_POST['help_url']:''); ?>"/><br/>
                                                                         <label for="kerdes">A kérdés: </label><input type="text" id="kerdes" name="kerdes" value="<?php print ((isset($_POST['kerdes']))?$_POST['kerdes']:''); ?>"/><br/> <!-- a sikertelenül elküldött formból postolt kerdesek -->
                                                                         <input type="hidden" name="valaszok" value="<?php print count($valaszok); ?>"/>
                                                                         <table border="1">
