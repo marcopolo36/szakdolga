@@ -1,5 +1,7 @@
 <?php
 
+checkPermission('regisztracio');
+
 	$page_title = "Regisztráció";
 	$menu = getMenu();
 	$page_main_title = "Regisztráció oldal!";

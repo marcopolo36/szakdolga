@@ -1,4 +1,7 @@
 <?php
+
+checkPermission('kvizjatek');
+
 	$page_title = "Kapcsolat";
 	$menu = getMenu();
 	$page_main_title = "Kvízjáték oldal!";

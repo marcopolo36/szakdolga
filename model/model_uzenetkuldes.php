@@ -1,4 +1,7 @@
 ﻿<?php
+
+checkPermission('uzenetkuldes');
+
     include('Mail.php');
     include('Mail/mime.php');
   
@@ -7,15 +10,12 @@
     $page_main_title = "Titkos üzeneted kvízjátéka!";
     $page_content = "";
 
-    $db_iface = new MySQLDatabase(); 
-    $test_user_id = 1; // TODO: Autentikációt meg kell írni
+    $db_iface = new MySQLDatabase();
     $kep_id;
     $uzenet_id;
     
     function saveFormToSession(){
-        global $test_user_id;
-        $_SESSION['uzenet']=array('KULDO_FELHASZNALO_ID'=>$test_user_id,
-                                  'EMAILCIM'=>$_POST['to'],
+        $_SESSION['uzenet']=array('EMAILCIM'=>$_POST['to'], //kulcshoz => érték hozzárendelés
                                   'KERESZTNEV_KULDO'=>$_POST['firstname'],
                                   'KERDES'=>$_POST['kerdes'],
                                   'VALASZ_1'=>$_POST['valasz_0'],
@@ -29,9 +29,7 @@
     
     function alapertekkel_feltolt_form () // a form a visszalépésnék kitöltött mezőkkel jelenjen meg
     {   
-        global $test_user_id;
-        $_SESSION['uzenet']=array('KULDO_FELHASZNALO_ID'=>$test_user_id, //kulcshoz => érték hozzárendelés
-                                  'EMAILCIM'=>"",
+        $_SESSION['uzenet']=array('EMAILCIM'=>"", //kulcshoz => érték hozzárendelés
                                   'KERESZTNEV_KULDO'=>"",
                                   'KERDES'=>"",
                                   'VALASZ_1'=>"",
@@ -90,7 +88,7 @@
             $html = "<html lang='hu'><body>".$_POST["szoveg"]."<br/><a href='" . $url ."'> ***Titkos üzenetedet itt olvashatod el</a></body></html>";
             $crlf = "\n";
             $headers = array (
-				"Content-Type" => "text/html; charset=UTF-8",
+		"Content-Type" => "text/html; charset=UTF-8",
                 "From" => $from,
                 "To" => $to,
                 "Subject" => $subject);
@@ -129,7 +127,6 @@
    }
     
    function ment_adatbazisba(){ // adatbázisba menti a képet
-        global $test_user_id;
         global $kep_id;
         global $db_iface;
         $success = $db_iface->query("INSERT INTO `{PREFIX}kep` () VALUES ();", array());
@@ -155,7 +152,6 @@
 
     function kviz_mentes()
     {   
-        global $test_user_id;
         global $kep_id;
         global $db_iface;
         global $uzenet_id;
@@ -178,7 +174,7 @@
                $query_string = 'INSERT INTO `{PREFIX}uzenet` ' . 
                                '(`kuldo_felhasznalo_id`,`emailcim`,`keresztnev_kuldo`,`kerdes`,`valasz_1`,`valasz_2`,`valasz_3`,`helyesvalasz_sorszam`,`t_uzenet`,`kep_id`) ' .
                                'VALUES ( \'{KULDO_FELHASZNALO_ID}\', \'{EMAILCIM}\',\'{KERESZTNEV_KULDO}\',\'{KERDES}\',\'{VALASZ_1}\',\'{VALASZ_2}\',\'{VALASZ_3}\',\'{HELYESVALASZ_SORSZAM}\',\'{T_UZENET}\',\'{KEP_ID}\');';
-               $params_array =  array ( 'KULDO_FELHASZNALO_ID'=>$test_user_id,
+               $params_array =  array ( 'KULDO_FELHASZNALO_ID'=>$_SESSION["user"]['id'],
                                         'EMAILCIM'=>$_POST['to'],
                                         'KERESZTNEV_KULDO'=>$_POST['firstname'],
                                         'KERDES'=>$_POST['kerdes'],

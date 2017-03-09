@@ -1,6 +1,7 @@
 <?php
 
-        // TODO
+checkPermission('kijelentkezes');
+logOut();
         
         $page_title = "Kijelentkezés";
 	$menu = getMenu();

@@ -1,5 +1,7 @@
 <?php
 
+checkPermission('kviz');
+
 	$page_title = "Kvíz";
 	$menu = getMenu();
 	$page_main_title = "Kvíz oldal!";

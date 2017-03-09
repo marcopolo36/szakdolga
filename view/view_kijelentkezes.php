@@ -43,7 +43,6 @@
 
 		</div>
 		
-		<?php  echo $page_content;  ?>
 
 		<div class="col-sm-12" style="background-color:lavender;">
 			<div class="panel panel-primary">
@@ -53,7 +52,7 @@
 					</h3>
 				</div>
 				<div class="panel-body">
-					
+					<?php  echo $page_content;  ?>
 				</div>
 			</div>
 

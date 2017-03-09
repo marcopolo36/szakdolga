@@ -1,4 +1,7 @@
 <?php
+
+checkPermission('admin');
+
 $page_title = "Adminisztrációs oldal";
 $menu = getMenu();
 $page_main_title = "Adminisztrációs oldal!";

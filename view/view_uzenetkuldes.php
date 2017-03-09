@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 <head>
 <title><?php echo $page_title; ?></title>
@@ -9,9 +9,12 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body>
-<div class="container-fluid">	
-	<div id="row">		
+<div class="container-fluid">
+	
+	<div id="row">
+		
 		<div class="col-sm-12" style="background-color:#af90af;">
+
 			<nav class="navbar navbar-default">
 			  <div class="container-fluid">
 				<div class="navbar-header">
@@ -26,14 +29,17 @@
 
 				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 				  <ul class="nav navbar-nav">
-						<?php foreach($menu as $link => $link_text) { ?>
-							<li><a href="index.php?site=<?php echo $link; ?>"><?php echo $link_text; ?></a></li>
-						<?php } ?>
-                                               
+						<?php
+						foreach($menu as $link => $link_text) {
+							?><li><a href="index.php?site=<?php echo $link; ?>"><?php echo $link_text; ?></a></li><?php
+						}
+                                                ?>	
 				  </ul>
 				</div>
 			  </div>
 			</nav>
+
+
 		</div>
        
 		<div class="col-sm-12" style="background-color:lavender;">

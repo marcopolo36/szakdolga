@@ -1,4 +1,7 @@
 <?php
+
+checkPermission('titkos');
+
 	$page_title = "Kvíz";
 	$menu = getMenu();
 	$page_main_title = "Titkos üzeneted kvízjátéka!";
