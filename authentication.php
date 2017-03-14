@@ -11,6 +11,7 @@ $adminPermissions = array(
                     "kvizjatek"=>"Kvízjáték",
                     "kviz"=>"Kvíz",
                     "kapcsolat"=>"Kapcsolat",
+                    "feltetelek"=>"Feltételek",
                     "bejelentkezes"=>"Bejelentkezés",
                     "kijelentkezes"=>"Kijelentkezés",
                     "admin"=>"Adminisztráció"
@@ -18,11 +19,11 @@ $adminPermissions = array(
 
 $userPermissions = array(
                     "kezdolap"=>"Kezdőlap", 
-                    "regisztracio"=>"Regisztráció",
                     "uzenetkuldes"=>"Üzenetküldés",
                     "kvizjatek"=>"Kvízjáték",
                     "kviz"=>"Kvíz",
                     "kapcsolat"=>"Kapcsolat",
+                    "feltetelek"=>"Feltételek",
                     "kijelentkezes"=>"Kijelentkezés"
                 );
 
@@ -30,6 +31,7 @@ $anonymusPermissions = array(
                     "kezdolap"=>"Kezdőlap", 
                     "regisztracio"=>"Regisztráció",
                     "kapcsolat"=>"Kapcsolat",
+                    "feltetelek"=>"Feltételek",
                     "bejelentkezes"=>"Bejelentkezés"
                 );
 

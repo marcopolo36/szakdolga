@@ -32,6 +32,9 @@ if(isset($_GET["site"])){
         } elseif ($_GET["site"]=="titkos"){
 		include("model/model_titkos.php");
 		include("view/view_titkos.php");
+        } elseif ($_GET["site"]=="feltetelek"){
+		include("model/model_feltetelek.php");
+		include("view/view_feltetelek.php");
 	} else {
 		include("model/model_kezdolap.php");
 		include("view/view_kezdolap.php");			

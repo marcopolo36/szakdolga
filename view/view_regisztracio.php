@@ -49,7 +49,6 @@
 
 		</div>
 		
-		<!--<p><?php /* echo $page_content; */ ?></p>-->
 
 		<div class="col-sm-12" style="background-color:lavender;">
 			<div class="panel panel-primary">
@@ -60,6 +59,28 @@
 				</div>
 				<div class="panel-body">
 					
+                                    <h2>Regisztráció</h2>
+                                    <form method="post" action="index.php?site=regisztracio">  
+                                      Felhasználónév: <input type="text" name="nev">
+                                      <br><br>
+                                      Jelszó: <input type="password" name="jelszo">
+                                      <br><br>
+                                      Email cím: <input type="email" name="email">
+                                      <br><br>
+                                      <input type="checkbox" name="elfogadas" value="igen"><a target="_blank" href="index.php?site=feltetelek"> Felhasználási feltételeket</a> elfogadom.<br>
+                                      <br><br>
+                                      <input type="submit" name="submit" value="Elküld">
+                                      
+                                    </form>
+                                    <?php if(! $reg_sikeres) { ?>
+                                        <p style="color: red;">Sikertelen regisztráció!</p>
+                                        <?php if(count($errors) != 0) { ?>
+                                        A következő hibák léptek föl: <br/>
+                                        <?php foreach($errors as $error) { ?>
+                                           <?php print $error; ?><br/>
+                                        <?php } ?>
+                                    <?php } ?>
+                                     <?php } ?>
 				</div>
 			</div>
 

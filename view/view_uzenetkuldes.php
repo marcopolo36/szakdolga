@@ -57,7 +57,9 @@
                                         <?php foreach($errors as $error) { ?>
                                            <?php print $error; ?><br/>
                                         <?php } ?>
-                                    <?php } ?>
+                                    <?php } else { ?>
+                                           <p style="color: green;">Üzenetküldés sikerült!</a>
+                                    <?php }  ?>
                                     <p>Kérdés hozzáadása a titkos üzenethez kvízjátékkal</><br/>
                                     <form method="POST"><input type="hidden" name="action" value="new_message"/>
                                     <label for="kerdes">A kérdés: </label><input type="text" id="kerdes" name="kerdes" value="<?php print $_SESSION['uzenet']['KERDES'];  ?>"/><br/>

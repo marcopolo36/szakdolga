@@ -69,7 +69,7 @@
            <?php  } elseif($_SESSION["allapot"] == 'email_form') { ?>
                      <p>Titkos üzeneted:</><br/>
                          <?php print $_SESSION["lekerdezes"]['t_uzenet']; ?>
-                     <p>Szeretnél válaszolni?</><br/>
+                     <p>Szeretnél válaszolni vagy játszanál még kvíz játékot?</><br/>
                      <form method="POST" action="index.php?site=regisztracio">
                      <input type="submit" value="Igen"/></form>               
            <?php  } elseif($_SESSION["allapot"] == "sikertelen") { ?>

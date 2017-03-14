@@ -1,12 +1,14 @@
 <?php
 
-checkPermission('kviz');
-
+        checkPermission('kviz');
 	$page_title = "Kvíz";
 	$menu = getMenu();
 	$page_main_title = "Kvíz oldal!";
 	$page_content = "";
         
+        if(! isset($_GET["promotion_id"])) {
+            die("Nincs kiválasztott promóció.");
+        }
         $promotion_id = $_GET["promotion_id"];
         $db_iface = new MySQLDatabase();
 

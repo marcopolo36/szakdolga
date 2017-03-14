@@ -117,10 +117,9 @@ checkPermission('uzenetkuldes');
                 "username" => $username,
                 "password" => $password));
             $mail = $smtp->send($to, $headers, $body);
+           
             if (PEAR::isError($mail)) {
-                    print("<p>Hibaüzenet: ".$mail->getMessage()."</p>");
-            } else {
-                    print("<p>Levélküldés sikerült.</p>");
+                    $errors[] = "Hibaüzenet: ".$mail->getMessage();
             }
             @unlink("./".$_FILES["csatolt"]["name"]); // a feltöltött és a már - remélhetőleg - elküldött fájl törlése
         }  
@@ -166,11 +165,14 @@ checkPermission('uzenetkuldes');
             }      
             if (count($valaszok) != 3) {
                 $errors[] = 'Nem töltötted ki az összes választ';
-            } elseif(!isset($_POST['kerdes']) || $errors[] = 'Üresen hagytad a kérdés címét' && empty($_POST['kerdes'])) {
+            }
+            if(empty($_POST['kerdes'])) {
                 $errors[] = 'Üresen hagytad a kérdés címét';
-            } elseif(!isset($_POST['helyes']) || !is_numeric($_POST['helyes']) || !isset($valaszok[$_POST['helyes']])) {
+            }
+            if(! is_numeric($_POST['helyes']) || !isset($valaszok[$_POST['helyes']])) {
                 $errors[] = 'Nem jelölted ki a helyes választ';
-            } else {
+            } 
+            if(empty($errors)) {
                $query_string = 'INSERT INTO `{PREFIX}uzenet` ' . 
                                '(`kuldo_felhasznalo_id`,`emailcim`,`keresztnev_kuldo`,`kerdes`,`valasz_1`,`valasz_2`,`valasz_3`,`helyesvalasz_sorszam`,`t_uzenet`,`kep_id`) ' .
                                'VALUES ( \'{KULDO_FELHASZNALO_ID}\', \'{EMAILCIM}\',\'{KERESZTNEV_KULDO}\',\'{KERDES}\',\'{VALASZ_1}\',\'{VALASZ_2}\',\'{VALASZ_3}\',\'{HELYESVALASZ_SORSZAM}\',\'{T_UZENET}\',\'{KEP_ID}\');';
