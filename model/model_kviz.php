@@ -1,6 +1,7 @@
 <?php
 
         checkPermission('kviz');
+        
 	$page_title = "Kvíz";
 	$menu = getMenu();
 	$page_main_title = "Kvíz oldal!";
@@ -28,7 +29,7 @@
 	}
 	$row = mysql_fetch_assoc($result); //kvíz adattábla egy sorát adja vissza
 	$promotion_nev = $row['nev'];  //kvíz cimét lementi
-	
+        $promotion_datum= $row['datum']; //kvíz záró dátumát lementi
 	//munkamenet nyitása, ha még nem volt elkezdve
 	if(!isset($_SESSION) && false === @session_start()) //@ - PHP hibaüzenetek elnyomása
 		die('Probléma a munkamenetekkel!');
@@ -65,7 +66,7 @@
         $question_text;
         $question_help;
 	while($row = mysql_fetch_assoc($result)) {
-		if(!in_array($row['id'],array_keys($answers))) { //ha ez a kérdés még nem lett feltéve, kulcsok között keres
+		if(!in_array($row['id'], array_keys($answers))) { //ha ez a kérdés még nem lett feltéve, kulcsok között keres
 			$finished = false;  //ha van egy megválaszolatlan kérdés, akkor még nem végeztünk
 			$question_id = $row['id'];
                         $question_text = $row['szoveg']; //felteszi a kérdést, aminek az id-jét megszereztük
@@ -111,7 +112,31 @@
                         else {
                             $helyesek++;
                         }
+                        
 		}
+                
+                // Kitöltött kvíz?
+                $felhasznalo_id = $_SESSION["user"]['id'];
+                $num_rows = $db_iface->num_rows('SELECT * FROM `{PREFIX}teljesites` WHERE `promocio_id`={PROMOTION_ID} AND `felhasznalo_id`={FELHASZNALO_ID};',
+                       array('PROMOTION_ID'=>$promotion_id,'FELHASZNALO_ID'=>$felhasznalo_id ));
+                
+                if ($num_rows == 0){
+                // helyes megoldás tényét elmentjük                    
+                    if($helyesek == count($solutions)){ //$teljesult_e = $helyesek == count($_esolutions);
+                        $teljesult_e = 1;
+                    } else {
+                        $teljesult_e = 0; 
+                    }
+
+                    $query_string = 'INSERT INTO `{PREFIX}teljesites` (`felhasznalo_id`, `promocio_id`, `teljesult_e`) ' . 
+                                    'VALUES ( \'{FELHASZNALO_ID}\', \'{PROMOTION_ID}\',\'{TELJESULT_E}\');';
+                    $query_params = array('FELHASZNALO_ID'=>$felhasznalo_id, 'PROMOTION_ID'=>$promotion_id, 'TELJESULT_E'=>$teljesult_e);
+                    if(! $db_iface->query($query_string,$query_params)) {
+                        print $db_iface->report();
+                        die("Adatbázis lekérdezési hiba.");
+                    }
+                }
+                        
 	} else { //ha nincs befejezve a kvíz -- 2. állapot
 		/*mutassuk a következő kérdést*/
 		//a kérdéshez tartozó válaszokat töltjük be

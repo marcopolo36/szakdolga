@@ -75,25 +75,36 @@ function setDefault() { //default értékekkel tölti fel a sessiont
     }
 }
 
+// Leírás: elkészíti az aktuális felhasználó szerepkörének megfeleltett menüpontok tömbjét és visszaadja azt.
+// Paraméterek:
+//  (- x: string - a szakállas bácsi neve))
+//  (- y: integer - tárolja a bácsi szakállának a hosszát)
+// visszatérési érték: menupontok: array
 function getMenu()
 {   
     global $adminPermissions, $userPermissions, $anonymusPermissions;
     
+    $permissions;
     switch ($_SESSION["user"]['szerepkor']) {
         case 'Admin':
-            return $adminPermissions;
+            $permissions = $adminPermissions; break;
         case 'Felhasználó':
-            return $userPermissions;
+            $permissions = $userPermissions; break;
         case 'Anonymus':
-            return $anonymusPermissions;
+            $permissions = $anonymusPermissions; break;
     }
+    
+    // szűrés
+    unset($permissions["kviz"]);
+    
+    return $permissions;
 }
 
 function checkPermission($page)
 {   
    global $adminPermissions, $userPermissions, $anonymusPermissions;
    
-   $noPermission = "Nincs engedélyed az oldalra belépni!";
+   $noPermission = "Nincs engedélyed a(z) " . $page . " oldalra belépni!";
    switch ($_SESSION["user"]['szerepkor']) {
         case 'Admin':
             if(array_key_exists($page,$adminPermissions) == false && $page != "titkos")
