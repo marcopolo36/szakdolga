@@ -12,7 +12,6 @@ $adminPermissions = array(
                     "kviz"=>"Kvíz",
                     "kapcsolat"=>"Kapcsolat",
                     "feltetelek"=>"Feltételek",
-                    "bejelentkezes"=>"Bejelentkezés",
                     "kijelentkezes"=>"Kijelentkezés",
                     "admin"=>"Adminisztráció"
                );
@@ -83,7 +82,7 @@ function setDefault() { //default értékekkel tölti fel a sessiont
 function getMenu()
 {   
     global $adminPermissions, $userPermissions, $anonymusPermissions;
-    
+
     $permissions;
     switch ($_SESSION["user"]['szerepkor']) {
         case 'Admin':

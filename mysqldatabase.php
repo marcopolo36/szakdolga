@@ -6,7 +6,7 @@ class MySQLDatabase {
 	private $_connection;
 	private $prefix;
 	private $last='';
-        private $db = array();
+    private $db = array();
        
 	function __construct() {
             $this->db["host"] = "localhost";
@@ -19,9 +19,9 @@ class MySQLDatabase {
             mysql_query("SET NAMES utf8;");
 	}
         
-        function __destruct() {
-            mysql_close($this->_connection);
-        }
+	function __destruct() {
+		mysql_close($this->_connection);
+	}
 	
 	function query($query_string,$vars=array()) {
 		foreach($vars as $key => $value) { //végigmegy a kulcs és értékpárokon
@@ -41,16 +41,16 @@ class MySQLDatabase {
 		return mysql_insert_id($this->_connection);
 	}
 	
-	function report() { //Visszatés a MySQL hiba számmaá : MySQL hiba, hozzáfűzi az utolsó MySQL lekérdezést
+	function report() { //Visszatés a MySQL hiba számmal : MySQL hiba, hozzáfűzi az utolsó MySQL lekérdezést
 		return "SQL report: " . mysql_errno($this->_connection).': '.mysql_error($this->_connection).'<br>'.$this->last;
 	}
         
-        function test_input($data) {
-                $data = trim($data);
-                $data = stripslashes($data);
-                $data = htmlspecialchars($data);
-                return $data;
-         }
+	function test_input($data) {
+			$data = trim($data);
+			$data = stripslashes($data);
+			$data = htmlspecialchars($data);
+			return $data;
+	 }
 }
 
 ?>

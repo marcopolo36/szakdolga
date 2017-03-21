@@ -1,18 +1,21 @@
-﻿<?php
+<?php
 
 checkPermission('uzenetkuldes');
 
     include('Mail.php');
     include('Mail/mime.php');
   
-    $page_title = "Kvíz";
-    $menu = getMenu();
-    $page_main_title = "Titkos üzeneted kvízjátéka!";
+    $page_main_title = "Üzenetküldés oldal!";
     $page_content = "";
+    $page_title = "Üzenetküldés";
+    $menu = getMenu();
 
     $db_iface = new MySQLDatabase();
     $kep_id;
     $uzenet_id;
+    
+    $valaszok = array();
+    $picture_dir = "sent_images/";
     
     function saveFormToSession(){
         $_SESSION['uzenet']=array('EMAILCIM'=>$_POST['to'], //kulcshoz => érték hozzárendelés
@@ -200,30 +203,17 @@ checkPermission('uzenetkuldes');
         return $success;
     }
 
-    $page_title = "Kezdőlap";
-    $menu = array(
-            "kezdolap"=>"Kezdőlap", 
-            "regisztracio"=>"Regisztráció",
-            "uzenetkuldes"=>"Üzenetküldés",
-            "kvizjatek"=>"Kvízjáték",
-            "kapcsolat"=>"Kapcsolat",
-            "bejelentkezes"=>"Bejelentkezés"
-            );
-    $page_main_title = "Üzenetküldés oldal!";
-    $page_content = "";
-    
-    $valaszok = array();
-    $errors = array();
-    $picture_dir = "sent_images/";
-
+    $errors;
     if(isset($_POST["picture"])) {
+        $errors = array();
         make_picture();
         $success = kviz_mentes();
         if($success) {
             emailt_kuld();
         }
     } else {
+        unset($errors);
         alapertekkel_feltolt_form ();
-    }    
+    }
        
 ?>

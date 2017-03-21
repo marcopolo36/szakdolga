@@ -1,8 +1,7 @@
 <?php
 
 if(isset($_GET["site"])){
-	
-	if($_GET["site"]=="kezdolap") {
+	if($_GET["site"]=="kezdolap") {            
 		include("model/model_kezdolap.php");
 		include("view/view_kezdolap.php");
 	} elseif ($_GET["site"]=="regisztracio"){

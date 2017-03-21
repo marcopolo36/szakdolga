@@ -1,5 +1,6 @@
 <?php
 
+
 checkPermission('kijelentkezes');
 logOut();
         

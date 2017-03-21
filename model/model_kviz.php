@@ -56,26 +56,38 @@
 			$error = 'Nem létezik a kérdés, vagy a válasz, vagy nem tartoznak össze';
 		}
 	}
-	
-	//kérdések betöltése az adatbázisból
-	$result = $db_iface->query('SELECT * FROM `{PREFIX}kerdes` WHERE `{PREFIX}kerdes`.`promocio_id`={ID};',array('ID'=>$promotion_id));
-	//ez a változó jelöli hogy befejeztük-e a quizt
-	$finished = true;
-	//lásuk mi az első olyan kérdés amit még nem válaszoltunk meg
+        
+        $query_string = 'SELECT * FROM `{PREFIX}teljesites` WHERE `{PREFIX}teljesites`.`promocio_id`={PROMOCIO_ID} AND `{PREFIX}teljesites`.`felhasznalo_id`={USER_ID};';
+	$params = array('PROMOCIO_ID'=>$promotion_id, 'USER_ID'=>$_SESSION["user"]["id"]);
+        $result = $db_iface->num_rows($query_string ,$params); //Lekérdezzük a teljesites táblából, hogy a felhasználó kitöltötte-e már a kvízt
+ 	//ez a változó jelöli hogy befejeztük-e a quizt
+	$kitoltott; //egy korábbi kviz kitöltés megléte      
+        if($result == 0) {
+            $kitoltott = false;
+        } else {
+            $kitoltott = true;
+        }
+        
+        $finished = true;
+        //lássuk mi az első olyan kérdés amit még nem válaszoltunk meg
         $question_id;
         $question_text;
-        $question_help;
-	while($row = mysql_fetch_assoc($result)) {
-		if(!in_array($row['id'], array_keys($answers))) { //ha ez a kérdés még nem lett feltéve, kulcsok között keres
-			$finished = false;  //ha van egy megválaszolatlan kérdés, akkor még nem végeztünk
-			$question_id = $row['id'];
+        $question_help;  
+        $question_num = count($answers); //megszámoljuk a feltett kérdéseinket
+        //kérdések betöltése az adatbázisból
+        $result = $db_iface->query('SELECT * FROM `{PREFIX}kerdes` WHERE `{PREFIX}kerdes`.`promocio_id`={ID};',array('ID'=>$promotion_id));
+        //ez a változó jelöli hogy befejeztük-e a quizt
+
+        while($row = mysql_fetch_assoc($result)) {
+                if(!in_array($row['id'], array_keys($answers))) { //ha ez a kérdés még nem lett feltéve, kulcsok között keres
+                        $finished = false;  //ha van egy megválaszolatlan kérdés, akkor még nem végeztünk
+                        $question_id = $row['id'];
                         $question_text = $row['szoveg']; //felteszi a kérdést, aminek az id-jét megszereztük
                         $question_help = $row['help_url'];
-			break;
-		}
-	}
-	$question_num_all = ($result)?mysql_num_rows($result):0; //hány kérdésünk van, ha nincs sora, akkor 0
-	$question_num = count($answers); //megszámoljuk a feltett kérdéseinket
+                        break;
+                }
+        }
+        $question_num_all = ($result)?mysql_num_rows($result):0; //hány kérdésünk van, ha nincs sora, akkor 0
         $solutions = array();
         /* példa a solution-ra
         $solutions = array(
@@ -90,8 +102,8 @@
         );
         */
   //1.állapot    
-	$new_question;	
-	if($finished) { // ha befejeztük a kvízt
+	$new_question;
+	if($finished || $kitoltott) { // ha az aktuális munkamenetben vagy egy korábbiban befejeztük a kvízt
 		foreach($answers as $q_id => $a_id) { // bejárjuk az asszociatív $answer tömbot, ahol az aktuális párból $q_id tárolja a kulcsot és $a_id az értéket
 			//a kérdés címe
 			$result = $db_iface->query('SELECT * FROM `{PREFIX}kerdes` WHERE `id`={Q_ID};',array('Q_ID'=>$q_id));
