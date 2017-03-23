@@ -6,5 +6,6 @@ checkPermission('kezdolap');
 	$menu = getMenu();
 	$page_main_title = "Kezdőlap oldal!";
 	$page_content = "";
+        $errors = array();
 
 ?>

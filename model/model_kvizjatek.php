@@ -6,6 +6,7 @@ checkPermission('kvizjatek');
 	$menu = getMenu();
 	$page_main_title = "Kvízjáték oldal!";
 	$page_content = "";
+        $errors = array();
         
         $db_iface = new MySQLDatabase();
 

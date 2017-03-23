@@ -9,6 +9,7 @@ checkPermission('uzenetkuldes');
     $page_content = "";
     $page_title = "Üzenetküldés";
     $menu = getMenu();
+    $errors = array();
 
     $db_iface = new MySQLDatabase();
     $kep_id;
@@ -30,7 +31,7 @@ checkPermission('uzenetkuldes');
                                   'PICTURE_NUM'=>$_POST['picture']);
     }
     
-    function alapertekkel_feltolt_form () // a form a visszalépésnék kitöltött mezőkkel jelenjen meg
+    function alapertekkel_feltolt_form () // a form a visszalépésnél kitöltött mezőkkel jelenjen meg
     {   
         $_SESSION['uzenet']=array('EMAILCIM'=>"", //kulcshoz => érték hozzárendelés
                                   'KERESZTNEV_KULDO'=>"",
@@ -79,11 +80,11 @@ checkPermission('uzenetkuldes');
        global $kep_id;
        global $uzenet_id;
         if (isset($_POST["to"])) {
-            $host = "ssl://smtp.gmail.com";
-            $port = "465"; //465 or 8465 can also be used
-            $username = "divenyi.officenet@gmail.com";
-            $password = "marcopolo36";
-            $from = "divenyi.officenet@gmail.com";
+            $host = "ssl://smtp.gmail.com"; //a tárhely szolgáltató értékeire átírni
+            $port = "465"; //a tárhely szolgáltató értékeire átírni
+            $username = "divenyi.officenet@gmail.com"; //a tárhely szolgáltató értékeire átírni
+            $password = "marcopolo36"; //a tárhely szolgáltató értékeire átírni
+            $from = "divenyi.officenet@gmail.com"; //a tárhely szolgáltató értékeire átírni
             $to = $_POST["to"];   
             $subject = "Titkos üzeneted érkezett";
             $url = "http://localhost/szakdolga/index.php?site=titkos&uzenet_id=" . $uzenet_id ;
@@ -133,7 +134,7 @@ checkPermission('uzenetkuldes');
         global $db_iface;
         $success = $db_iface->query("INSERT INTO `{PREFIX}kep` () VALUES ();", array());
         if(!$success) {
-            $errors[] = $db_iface->report();
+            $errors[] = "A kép mentése nem sikerült!";
         }
         $kep_id = $db_iface->last_inserted_id();//hozzáférek az objektum függvényéhez $db_iface->last_inserted_id()
     }
@@ -159,22 +160,7 @@ checkPermission('uzenetkuldes');
         global $uzenet_id;
         $success = false;
         saveFormToSession();
-        if(isset($_POST['valaszok']) && !empty($_POST['valaszok']) && is_numeric($_POST['valaszok'])) { //érkezzenek postból válaszok és legalább 2 legyen!
-            for($i=0;$i<3;$i++) {
-                if(isset($_POST['valasz_'.$i]) && !empty($_POST['valasz_'.$i]))
-                {
-                    $valaszok[$i] = $_POST['valasz_'.$i];
-                }
-            }      
-            if (count($valaszok) != 3) {
-                $errors[] = 'Nem töltötted ki az összes választ';
-            }
-            if(empty($_POST['kerdes'])) {
-                $errors[] = 'Üresen hagytad a kérdés címét';
-            }
-            if(! is_numeric($_POST['helyes']) || !isset($valaszok[$_POST['helyes']])) {
-                $errors[] = 'Nem jelölted ki a helyes választ';
-            } 
+        if(isset($_POST['valaszok']) && !empty($_POST['valaszok']) && is_numeric($_POST['valaszok'])) { //érkezzenek postból válaszok és legalább 2 legyen! 
             if(empty($errors)) {
                $query_string = 'INSERT INTO `{PREFIX}uzenet` ' . 
                                '(`kuldo_felhasznalo_id`,`emailcim`,`keresztnev_kuldo`,`kerdes`,`valasz_1`,`valasz_2`,`valasz_3`,`helyesvalasz_sorszam`,`t_uzenet`,`kep_id`) ' .
@@ -193,7 +179,7 @@ checkPermission('uzenetkuldes');
                $uzenet_id = $db_iface->last_inserted_id();
                 // a kérdés tábla több mezőjébe is új értékeket szúr be a postokból
                 if(!$result) {
-                    $errors[] = $db_iface->report();
+                    $errors[] = "A titkos üzenet mentése sikertelen!";
                     $success = false;
                 } else {
                     $success = true;
@@ -202,17 +188,53 @@ checkPermission('uzenetkuldes');
         }
         return $success;
     }
+    
+    function formValidation() {
+        global $valaszok, $errors;
+        if(empty($_POST['kerdes'])) {
+            $errors[] = 'Üresen hagytad a kérdés címét.';
+        }
+        if(! isset($_POST["helyes"])) {
+            $errors[] = "Nincs kiválasztva helyes válasz.";
+        }
+        for($i=0;$i<3;$i++) {
+            if(isset($_POST['valasz_'.$i]) && !empty($_POST['valasz_'.$i])) {
+                $valaszok[$i] = $_POST['valasz_'.$i];
+            }
+        }      
+        if (count($valaszok) != 3) {
+            $errors[] = 'Nem töltötted ki az összes választ.';
+        }
+        if(empty($_POST['t_uzenet'])) {
+            $errors[] = 'Üresen hagytad a titkos üzenetet.';
+        }
+        if(empty($_POST['firstname'])) {
+            $errors[] = 'Üresen hagytad a keresztnév mezőt.';
+        }
+        if(empty($_POST['to'])) {
+            $errors[] = 'Üresen hagytad a címzett mezőt.';
+        }
+        if(empty($_POST['szoveg'])) {
+            $errors[] = 'Üresen hagytad az üdvözlő üzenet mezőt.';
+        }
+        if(! isset($_POST["picture"])) {
+            $errors[] = "Nincs kiválasztva kép.";
+        }
+    }
 
-    $errors;
-    if(isset($_POST["picture"])) {
-        $errors = array();
-        make_picture();
-        $success = kviz_mentes();
-        if($success) {
+    if(isset($_POST["kerdes"])) {
+        formValidation();
+        if(empty($errors)) {
+            make_picture();
+        }
+        $success = false;
+        if(empty($errors)) {
+            $success = kviz_mentes();
+        }
+        if($success && empty($errors)) {
             emailt_kuld();
         }
     } else {
-        unset($errors);
         alapertekkel_feltolt_form ();
     }
        

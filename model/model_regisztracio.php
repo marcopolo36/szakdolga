@@ -8,6 +8,7 @@
 	$page_content = "Regisztráció oldal tartalma!";
         $reg_sikeres = true;
         $db_iface = new MySQLDatabase();
+        $errors = array();
         
         if(isset($_POST['nev'])) { //érkezzen post
             if(empty($_POST['nev'])) {

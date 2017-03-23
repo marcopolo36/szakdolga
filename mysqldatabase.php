@@ -6,7 +6,7 @@ class MySQLDatabase {
 	private $_connection;
 	private $prefix;
 	private $last='';
-    private $db = array();
+        private $db = array();
        
 	function __construct() {
             $this->db["host"] = "localhost";

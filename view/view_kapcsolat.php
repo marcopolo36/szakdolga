@@ -16,6 +16,7 @@
   </script>
 </head>
 <body>
+    <?php showErrors($errors); ?>
 <div class="container-fluid">
 	
 	<div id="row">

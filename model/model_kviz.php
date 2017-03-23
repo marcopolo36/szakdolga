@@ -6,6 +6,7 @@
 	$menu = getMenu();
 	$page_main_title = "Kvíz oldal!";
 	$page_content = "";
+        $errors = array();
         
         if(! isset($_GET["promotion_id"])) {
             die("Nincs kiválasztott promóció.");

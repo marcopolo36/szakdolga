@@ -16,6 +16,7 @@
   </script>
 </head>
 <body>
+    <?php showErrors($errors); ?>
 <div class="container-fluid">
 	
 	<div id="row">
@@ -61,15 +62,8 @@
 				</div>
                                 
 				<div class="panel-body">
-                                    <?php if(isset($errors)) { ?>  
-                                        <?php if(count($errors) != 0) { ?>
-                                           A kérés (művelet: kvíz törlése) feldolgozása közben a következő hibák léptek föl: <br/>
-                                           <?php foreach($errors as $error) { ?>
-                                              <?php print $error; ?><br/>
-                                           <?php } ?>
-                                       <?php } else { ?>
-                                              <p style="color: green;">Üzenetküldés sikerült!</a>
-                                       <?php }  ?>
+                                    <?php if(count($errors) == 0 && isset($_POST["kerdes"])) { ?>
+                                           <p style="color: green;">Üzenetküldés sikerült!</a>
                                     <?php }  ?>
                                     <p>Kérdés hozzáadása a titkos üzenethez kvízjátékkal</><br/>
                                     <form method="POST"><input type="hidden" name="action" value="new_message"/>
