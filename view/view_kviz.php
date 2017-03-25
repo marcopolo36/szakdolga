@@ -70,7 +70,7 @@
                 Gratulálok<br />Sikeresen teljesítetted a kvízt
 		<table border="1">
 		<tr><td><b>A kérdés</b></td><td><b>Az ön által adott válasz</b></td><td><b>A helyes válasz</b></td></tr>
-		<?php foreach($solutions as $question => $two_answers) { // bejárjuk az asszociatív $soluiton tömbot, ahol az aktuális párból $question tárolja a kulcsot (a kérdés szövegét) és az $two_answers a megadott és a helyes válasz szövegeit ?>
+		<?php foreach($solutions as $question => $two_answers) { // bejárjuk az asszociatív $solution tömbot, ahol az aktuális párból $question tárolja a kulcsot (a kérdés szövegét) és az $two_answers a megadott és a helyes válasz szövegeit ?>
                         <?php if(isset($two_answers["helyes_valasz"])) { //ha az adatbázis logikai változója igaz (1) ?>
                                 <tr><td><?php print $question; ?></td><td><font color="red"><?php print $two_answers["valasz"];?></font></td><td><?php print $two_answers["helyes_valasz"]; ?></td></tr> <!-- a válaszokat ha helyes zöld színre váltja, ha hamis pirosra -->
 			<?php } else { ?><!-- //különben az adatbázisból kiszedjük a helyes választ -->
@@ -82,7 +82,7 @@
                 <?php $szazalek = $ossz != 0 ? round(($helyesek/$ossz)*100,2) : 0; // ha 0 kérdés van a kvízben, akkor 0%. A százalékunk egy kerekített egész szám lesz 0-100 közözött ?>
                 
                 <?php if($szazalek==100){ ?> 
-                   <font size="2em"><b>Helyesen válaszoltál! A sorsolás ideje: <?php print $promotion_datum ;?> </b> 
+                   <font size="2em"><b>Tökéletesen válaszoltál! A sorsolás ideje: <?php print $promotion_datum ;?> </b> 
                 <?php   }else { ?> 
                 <font size="2em"><b> <?php print $helyesek; ?> helyes válasza volt <?php print $szazalek; ?> % teljesítmény</b></font>
 		<form method="POST"><input type="submit" name="reset_quiz" value="Töröl"/></form>

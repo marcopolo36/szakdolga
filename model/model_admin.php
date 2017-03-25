@@ -47,7 +47,7 @@ function remove_question($kerdes_id) { //egy megadott id-jú kérdést töröl
         }
         if($success && ! $db_iface->query('DELETE FROM `{PREFIX}kerdes` WHERE `id`={ID};',array('ID'=>$kerdes_id))) {// majd a kérdést, amihez a válszok tartoztak 
             $errors[] = "A kérdés törlése sikertelen.";
-            $sucess = false;
+            $success = false;
         }
         
         return $success;
