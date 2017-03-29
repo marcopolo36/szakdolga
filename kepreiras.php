@@ -1,4 +1,4 @@
-﻿<?php
+<?php
   $forras=$_FILES["kep"]["tmp_name"];
   $kepnev = $_FILES["kep"]["name"];
   move_uploaded_file($forras,"./".$kepnev);
