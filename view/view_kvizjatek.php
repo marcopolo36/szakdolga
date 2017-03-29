@@ -66,7 +66,8 @@
                                     <ul style="list-style-type:disc">
                                        <?php $sor; ?>
                                        <?php  while ($sor = mysql_fetch_array($result)) { ?>
-                                                <li><a href="index.php?site=kviz&promotion_id=<?php print $sor['id']; ?>"><?php  print $sor['nev']; ?></a></li>
+                                                <li><b><font color="black" size="3em"><a href="index.php?site=kviz&promotion_id=<?php print $sor['id']; ?>"><?php  print $sor['nev']; ?></b></font></a><br>
+                                                <p><font color="black" size="2em"><?php  print $sor['leiras']; ?></p></font></li>
                                        <?php }?>
                                     </ul>
 					

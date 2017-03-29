@@ -18,15 +18,14 @@ checkPermission('titkos');
         
         $db_iface = new MySQLDatabase();
 
-        if(! isset($_POST['valasz']) && ! isset($_SESSION["allapot"])) { // 1. állapot: form kitöltése (első megjelenés)
+        if(! isset($_POST['valasz']) && ! isset($_POST["keresztnev"])) { // 1. állapot: form kitöltése (első megjelenés)
             $_SESSION["allapot"] = "kerdes_form";
             $result = $db_iface->query(
-                'SELECT * FROM `{PREFIX}uzenet` WHERE `{PREFIX}uzenet`.`id`={ID};',
+                'SELECT * FROM `{PREFIX}uzenet` WHERE `{PREFIX}uzenet`.`id`={ID} AND `megtekintett`=0;',
                 array('ID'=>$uzenet_id));
             $rows = ($result)?mysql_num_rows($result):0;
             if($rows == 0) {
-                    print 'Az id='.$uzenet_id.' kvíz nem létezik.';
-                    return;
+                    die('A kvíz nem létezik vagy már ki lett töltve');
             }
             $row = mysql_fetch_assoc($result); //üzenet adattábla egy sorát adja vissza, betöltöm egy asszociációs tömmbe utána kulcs és érték párokat rendelek hozzá
             $_SESSION["lekerdezes"] = array(
@@ -51,8 +50,21 @@ checkPermission('titkos');
             ++$_SESSION["nev_probalkozas"];
             if(strcmp($_POST['keresztnev'], $_SESSION["lekerdezes"]["keresztnev_kuldo"]) == 0) { //string összehasonlítás
                 $_SESSION["allapot"] = "email_form"; // 3/a. állapotba kerül
+                save();
             } else if($_SESSION["nev_probalkozas"] >= 3) {
                 $_SESSION["allapot"] = "sikertelen"; // 3/b. állapotba kerül
+                save();
+            }
+        }
+        
+        function save() {
+            global $db_iface;
+            $result = $db_iface->query(
+                'UPDATE `{PREFIX}uzenet` SET megtekintett = 1 WHERE `{PREFIX}uzenet`.`id`={ID};',
+                array('ID'=>$_SESSION["lekerdezes"]["id"]));
+            if(! $result) {
+                    print 'A titkos üzenet megtekintettségének mentése sikertelen.';
+                    return;
             }
         }
 ?>

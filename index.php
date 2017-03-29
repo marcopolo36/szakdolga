@@ -3,7 +3,7 @@
 session_start();
 
 // php üzenetek kikapcsolása biztonsági okból
-// error_reporting(0);
+//error_reporting(0);
 
 // fontos, hogy milyen sorrendben includálunk
 

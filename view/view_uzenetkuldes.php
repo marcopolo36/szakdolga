@@ -85,22 +85,22 @@
                                             <textarea name="t_uzenet" id="t_uzenet"><?php print $_SESSION['uzenet']['T_UZENET']; ?></textarea><br/>
                                             <p>&nbsp;</p>
                                           <!--< <form method="post" enctype="multipart/form-data" name="form1" id="form1">-->
-                                             <p>A te keresztneved: 
+                                             <p>A te keresztneved (Nem a beceneved!): 
                                               <input type="text" name="firstname" id="firstname" text="<?php print $_SESSION['uzenet']['KERESZTNEV_KULDO']; ?>"/>
                                             </p>
                                              <p>Címzett email címe: 
                                               <input type="text" name="to" id="to" value="<?php print $_SESSION['uzenet']['EMAILCIM']; ?>"/>
                                             </p>
                                              <p>&nbsp;</p>
-                                            <p>Képre írt üdvözlő üzenet szövege (15 karakter): <input type="text" name="szoveg" id="szoveg" value="<?php print $_SESSION['uzenet']['SZOVEG']; ?>" /></p>
+                                            <p>Képre írt üdvözlő üzenet szövege (20 karakter): <input type="text" name="szoveg" id="szoveg" value="<?php print $_SESSION['uzenet']['SZOVEG']; ?>" /></p>
                                                  <p>&nbsp;</p>                                 
                                               <p>A kiválasztandó kép: </p>
 
-                                              <input type="radio" name="picture" value="1" <?php if($_SESSION['uzenet']['PICTURE_NUM'] == 1) print "checked='checked'"; ?>><img src="images/nevnap.jpg" alt="kep1" style="width:97px;height:69px;"><br>
+                                              <input type="radio" name="picture" value="1" <?php if($_SESSION['uzenet']['PICTURE_NUM'] == 1) print "checked='checked'"; ?>><img src="images/nevnap.jpg" alt="kep1" style="width:122px;height:87px;"><br>
                                               <p>&nbsp;</p>
-                                              <input type="radio" name="picture" value="2" <?php if($_SESSION['uzenet']['PICTURE_NUM'] == 2) print "checked='checked'"; ?>><img src="images/szulinap.jpg" alt="kep2" style="width:97px;height:69px;"><br>
+                                              <input type="radio" name="picture" value="2" <?php if($_SESSION['uzenet']['PICTURE_NUM'] == 2) print "checked='checked'"; ?>><img src="images/szulinap.jpg" alt="kep2" style="width:122px;height:87px;"><br>
                                               <p>&nbsp;</p>
-                                              <input type="radio" name="picture" value="3" <?php if($_SESSION['uzenet']['PICTURE_NUM'] == 3) print "checked='checked'"; ?>><img src="images/valentinnap.jpg" alt="kep3" style="width:97px;height:69px;"><br>
+                                              <input type="radio" name="picture" value="3" <?php if($_SESSION['uzenet']['PICTURE_NUM'] == 3) print "checked='checked'"; ?>><img src="images/udvozlet.jpg" alt="kep3" style="width:122px;height:87px;"><br>
                                               <p>&nbsp;</p>
                                               <p><input type="submit" name="sent" id="button" value="Küldés"  </p> 
                                     </form>

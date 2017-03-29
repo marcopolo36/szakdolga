@@ -100,9 +100,9 @@ if(isset($_POST['action'])) {
                 }
                 if($success !== false) {
                     $quiz = $db_iface->last_inserted_id(); //az adatbázisba beszúr egy új id-t
-                } else {
+                } /*else {
                     print $db_iface->report();
-                } //üres is lehet a kvíz címe mező
+                } //üres is lehet a kvíz címe mező*/
 
         } elseif($_POST['action'] == 'new_question') { //új kérdést viszünk be
                 $result = $db_iface->query('SELECT * FROM `{PREFIX}promocio` WHERE `id`={ID};',array('ID'=>$_POST['quiz_id']));
@@ -133,7 +133,7 @@ if(isset($_POST['action'])) {
                                                 else {
                                                         $kerdes_id = $db_iface->last_inserted_id(); //,?? csak egy id-t használ
                                                         foreach($valaszok as $key => $valasz) { //végig megy a válasz tömbbön, hogy id-vel is lehessen hivatkozni rá
-                                                                $succes = $db_iface->query('INSERT INTO `{PREFIX}valasz` (`id`, `kerdes_id`, `szoveg`, `helyes`) VALUES (NULL, \'{KERD}\', \'{VAL}\', \'{HE}\');',array('KERD'=>$kerdes_id,'VAL'=>$valasz,'HE'=>(($key==$_POST['helyes'])?1:0))); //adatbázisban beszúrja a válasz táblába az étékeket postból és beállítja, hogy helyes-e
+                                                                $succes = $db_iface->query('INSERT INTO `{PREFIX}valasz` (`id`, `kerdes_id`, `szoveg`, `helyes`) VALUES (NULL, \'{KERD}\', \'{VAL}\', \'{HE}\');',array('KERD'=>$kerdes_id,'VAL'=>$valasz,'HE'=>(($key==$_POST['helyes'])?1:0))); //adatbázisban beszúrja a válasz táblába az értékeket postból és beállítja, hogy helyes-e
                                                                 if(!$success) $errors[] = "A válasz mentése sikertelen"; //kiíratjuk a MySQL hibát
                                                         }
                                                 }

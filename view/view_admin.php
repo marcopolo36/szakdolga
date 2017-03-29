@@ -79,7 +79,7 @@
                                                         </table><form method="POST"><input type="hidden" name="action" value="new_question"/><input type="hidden" name="quiz_id" value="<?php print $id; ?>"/><input type="submit" name="gomb" value="Új kérdés"/></form><form method="POST"><input type="submit" value="VISSZA" name="vissza"/></form>
                                  <?php  } elseif ($_POST['action'] == 'create') {?><!--új kvíz készítés -->
                                       <?php     if($success !== false) { ?>
-                                                        A quizt sikeresen létrehozta!<br/><form method="POST"><input type="hidden" name="action" value="new_question"/><input type="hidden" name="quiz_id" value="<?php print $quiz; ?>"/><input type="submit" name="gomb" value="Tovább"/></form>
+                                                        A kvízt sikeresen létrehozta!<br/><form method="POST"><input type="hidden" name="action" value="new_question"/><input type="hidden" name="quiz_id" value="<?php print $quiz; ?>"/><input type="submit" name="gomb" value="Tovább"/></form>
                                          <?php  } else { ?>
                                                         <form method="POST"><input type="hidden" name="action" value="create"/>
                                                         <label for="title">A kvíz címe</label> <input type="text" name="title" value="<?php print ((isset($_POST['title']))?$_POST['title']:''); ?>"/> <br/>
@@ -92,9 +92,9 @@
                                                         <br/><form method="POST"><input type="submit" value="VISSZA" name="vissza"/></form>
                                   <?php } elseif($_POST['action'] == 'new_question') { ?> <!-- új kérdést viszünk be -->
                                         <?php   if($quiz === false) { ?><!-- $quiz az egyik ágban bool, a másik ágban asszociációs tömb, ami a modelben definiáltam -->
-                                                        Hiba a kérdéses quiz (id= <?php print $_POST['quiz_id']; ?>) nem létezik, vagy más hiba lépett fel<br/>mysql válasza: <?php print $db_iface->report(); ?><!-- MySQL hiba kiíratása -->
+                                                        Hiba a kérdéses kvíz (id= <?php print $_POST['quiz_id']; ?>) nem létezik, vagy más hiba lépett fel<br/>mysql válasza: <?php print $db_iface->report(); ?><!-- MySQL hiba kiíratása -->
                                          <?php  } else { ?>
-                                                        Új kérdés hozzáadása az "<?php print $quiz['nev']; ?>" quizhez<br/>
+                                                        Új kérdés hozzáadása az "<?php print $quiz['nev']; ?>" kvízhez<br/>
                                                 <?php   if($siker) { ?>
                                                                 A kérdés sikeresen hozzáadva az adatbázishoz<br/>
                                                                 <form method="POST"><input type="hidden" name="action" value="new_question"/><input type="hidden" name="quiz_id" value="<?php print $_POST['quiz_id']; ?>"/><input type="submit" name="kuld" value="+1 kérdés"/></form>
@@ -110,10 +110,10 @@
                                                                         <input type="hidden" name="valaszok" value="<?php print count($valaszok); ?>"/>
                                                                         <table border="1">
                                                           <?php foreach($valaszok as $key => $valasz) { ?>
-                                                           <?php  print $helyes = (isset($_POST['helyes']) && $_POST['helyes'] == $key)?' checked':'' ;?><megjegyezte a helyes választ 
+                                                           <?php $helyes = (isset($_POST['helyes']) && $_POST['helyes'] == $key)?' checked':'' ;?><!--megjegyezte a helyes választ -->
                                                                         <tr><td><input type="radio" name="helyes" value="<?php print $key; ?>"<?php print $helyes; ?>/></td><td><input type="text" name="valasz_<?php print $key; ?>" value="<?php print $valasz; ?>"/></td></tr> <!-- és bejelőli a radio gombját -->
                                                         <?php   } ?>
-                                                                        </table><br/><input type="submit" name="sent" value="Mehet"/> vagy <input type="submit" name="kerekmeg" value="+1 egy válaszlehetőség"/></form>
+                                                                        </table><br/><input type="submit" name="sent" value="Mehet"/> vagy <input type="submit" name="kerekmeg" value="+1 válaszlehetőség"/></form>
                                                  <?php  } ?>	<!-- nem sikerült kérdést elküldeni, akkor megjeleníti, hogy most elküldheted vagy új kérdést tehetsz fel -->
                                            <?php } ?>
                                                         <form method="POST"><input type="submit" value="VISSZA" name="vissza"/></form>

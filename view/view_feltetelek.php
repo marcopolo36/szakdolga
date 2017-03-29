@@ -63,14 +63,14 @@
 				</div>
 				<div class="panel-body">
 					 <h1>
-                                        ADATKEZELÉSI TÁJÉKOZTATÓ a METRO Kereskedelmi Kft. Hírlevél Szolgáltatásához
+                                        ADATKEZELÉSI TÁJÉKOZTATÓ a Office Network Kft. Hírlevél Szolgáltatásához
                                         </h1>
                                         <br>
-                                        Jelen Adatkezelési Tájékoztató a METRO Kereskedelmi Kft. (továbbiakban: METRO) elektronikusan küldött Hírlevelével kapcsolatos személyes adatkezelésére vonatkozik. Felhasználó az a természetes vagy jogi személy vagy jogi személyiséggel nem rendelkező gazdasági társaság, aki adatainak megadásával jogosulttá vált a Hírlevél Szolgáltatás igénybevételére. A jelen Adatkezelés Tájékoztató megismerése után a METRO hírlevelére történő regisztrációval és a szolgáltatás igénybevételével a Felhasználó hozzájárul, hogy személyes adatait a METRO ezen Adatkezelési Tájékoztatóban foglaltaknak megfelelően kezelje.
+                                        Jelen Adatkezelési Tájékoztató a Office Network Kft. elektronikusan küldött Hírlevelével kapcsolatos személyes adatkezelésére vonatkozik. Felhasználó az a természetes vagy jogi személy vagy jogi személyiséggel nem rendelkező gazdasági társaság, aki adatainak megadásával jogosulttá vált a Hírlevél Szolgáltatás igénybevételére. A jelen Adatkezelés Tájékoztató megismerése után a Office Network Kft. hírlevelére történő regisztrációval és a szolgáltatás igénybevételével a Felhasználó hozzájárul, hogy személyes adatait a Office Network Kft. ezen Adatkezelési Tájékoztatóban foglaltaknak megfelelően kezelje.
                                         <br>
                                         <strong>Adatkezelés célja</strong>
                                         <br>
-                                        A METRO Hírlevél Szolgáltatással kapcsolatos adatkezelésének célja a Felhasználó részére hírlevél küldése az e célból regisztrált Felhasználók részére, tájékoztatás az METRO által forgalmazott termékekkel és nyújtott szolgáltatásokkal kapcsolatos aktuális információkról, továbbá a Felhasználó piackutatási célból történő megkeresése a METRO szolgáltatások fejlesztése, optimalizálása érdekében.
+                                        Az Office Network Kft. Hírlevél Szolgáltatással kapcsolatos adatkezelésének célja a Felhasználó részére hírlevél küldése az e célból regisztrált Felhasználók részére nyereményjáték témakörben.
                                         <br>
 				</div>
 			</div>

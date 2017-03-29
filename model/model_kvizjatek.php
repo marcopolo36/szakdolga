@@ -2,7 +2,7 @@
 
 checkPermission('kvizjatek');
 
-	$page_title = "Kapcsolat";
+	$page_title = "Kvízjáték";
 	$menu = getMenu();
 	$page_main_title = "Kvízjáték oldal!";
 	$page_content = "";

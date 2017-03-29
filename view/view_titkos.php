@@ -83,8 +83,10 @@
                      <p>Titkos üzeneted:</><br/>
                          <?php print $_SESSION["lekerdezes"]['t_uzenet']; ?>
                      <p>Szeretnél válaszolni az üzenetre egy saját titkos üzenettel vagy játszanál még másik kvíz játékot?</><br/>
-                     <form method="POST" action="index.php?site=regisztracio">
-                     <input type="submit" value="Igen"/></form>               
+               <?php if($_SESSION["user"]["szerepkor"] == "Anonymus") { ?>
+                        <form method="POST" action="index.php?site=regisztracio">
+                        <input type="submit" value="Igen"/></form>
+               <?php } ?>
            <?php  } elseif($_SESSION["allapot"] == "sikertelen") { ?>
                      <p>Sajnos elfogyott próbálkozásaid száma, lemaradtál a titkos üzenetről!</p>
            <?php  } else { ?>

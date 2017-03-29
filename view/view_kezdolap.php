@@ -63,7 +63,12 @@
 					</h3>
 				</div>
 				<div class="panel-body">
-					
+				<h1>Mit játszhatunk itt?</h1>
+				<br>
+				<h2>Titkos üzenet küldést képeslapon kvízjátékkal.</h2>
+				Üdvözlő képeslapot küldhetünk „üdvözlő szöveggel” és egy „titkos üzenettel”. A címzett egy linkre kattintva a weboldalunk titkos üzenetének kvízjátékán landol. Amennyiben játszik és a feltett „személyre szabott” kérdésre helyes választ ad, még ki kell találnia a küldő keresztnevét és csak ezután olvashatja el a „titkos” üzenetét. „Személyes titkos üzenetét” egyedül csak a címzett láthatja.
+				<h2>Promóciós Kvízjátékot.</h2>
+				Weboldalunk „kvízjáték” oldalán a számunkra érdekes kvízjátékra klikkelve kérdésekre kell válaszolnunk, de mivel ezek promóciós játékok, ezért csak regisztrált játékosok játszhatnak, akik sorsoláson nyerhetik meg a szponzorok ajándékait.
 				</div>
 			</div>
 

@@ -82,7 +82,7 @@
                 <?php $szazalek = $ossz != 0 ? round(($helyesek/$ossz)*100,2) : 0; // ha 0 kérdés van a kvízben, akkor 0%. A százalékunk egy kerekített egész szám lesz 0-100 közözött ?>
                 
                 <?php if($szazalek==100){ ?> 
-                   <font size="2em"><b>Tökéletesen válaszoltál! A sorsolás ideje: <?php print $promotion_datum ;?> </b> 
+                   <font size="2em"><b>Tökéletesen válaszoltál! A sorsolás ideje: <?php print $promotion_datum ;?></b></font>
                 <?php   }else { ?> 
                 <font size="2em"><b> <?php print $helyesek; ?> helyes válasza volt <?php print $szazalek; ?> % teljesítmény</b></font>
 		<form method="POST"><input type="submit" name="reset_quiz" value="Töröl"/></form>

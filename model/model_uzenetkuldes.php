@@ -58,7 +58,7 @@ checkPermission('uzenetkuldes');
                 $forras="images/szulinap.jpg";
                 break;
             case "3":
-                $forras="images/valentinnap.jpg";
+                $forras="images/udvozlet.jpg";
                 break;
         }
         // űrlapról érkező fájl ideiglenes helye
@@ -67,8 +67,8 @@ checkPermission('uzenetkuldes');
 
         $tomorites = 100;
         $kep_info = getimagesize($cel);
-        $magassagX = (int)($kep_info[0]/2);  
-        $szelessegY = (int)($kep_info[1]/2);   
+        $magassagX = (int)($kep_info[0]/5);  //sajnos ez az Y koordináta!
+        $szelessegY = (int)($kep_info[1]/2);   //ez meg az X koordináta!
         $kep = imagecreatefromjpeg($cel);
         
         kepreir($kep, $tomorites, $magassagX, $szelessegY);
@@ -89,7 +89,7 @@ checkPermission('uzenetkuldes');
             $subject = "Titkos üzeneted érkezett";
             $url = "http://localhost/szakdolga/index.php?site=titkos&uzenet_id=" . $uzenet_id ;
             $text = $_POST["szoveg"] ."\n Titkos üzenetedet itt olvashatod el: ". $url ;
-            $html = "<html lang='hu'><body>".$_POST["szoveg"]."<br/><a href='" . $url ."'> ***Titkos üzenetedet itt olvashatod el</a></body></html>";
+            $html = "<html lang='hu'><body>".$_POST["szoveg"]."<br/><a href='" . $url ."'> ***Titkos üzenetedet itt olvashatod el***</a></body></html>";
             $crlf = "\n";
             $headers = array (
 		"Content-Type" => "text/html; charset=UTF-8",
@@ -144,7 +144,7 @@ checkPermission('uzenetkuldes');
         global $kep_id;
         $betu_meret = 30;
         $betu_szin = imagecolorallocate ($kep, 0,0,0);
-        $betu_tipus = "images/BAUHS93.TTF";
+        $betu_tipus = "images/timesi.ttf";
         // 1, 30 koordinatak x y hol helyezkedjen el
         imagefttext($kep, $betu_meret, 0, $magassagX, $szelessegY, $betu_szin, $betu_tipus, $_POST["szoveg"]);
         //mentjuk
