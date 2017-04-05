@@ -1,20 +1,13 @@
-<?php
+﻿<?php
 
-        checkPermission('kviz');
+	checkPermission('kviz');
+	$errors = array();
         
-	$page_title = "Kvíz";
-	$menu = getMenu();
-	$page_main_title = "Kvíz oldal!";
-	$page_content = "";
-        $errors = array();
-        
-        if(! isset($_GET["promotion_id"])) {
-            die("Nincs kiválasztott promóció.");
-        }
-        $promotion_id = $_GET["promotion_id"];
-        $db_iface = new MySQLDatabase();
-
-        //header('Content-type: text/html; charset=iso-8859-2');
+	if(! isset($_GET["promotion_id"])) {
+		die("Nincs kiválasztott promóció.");
+	}
+	$promotion_id = $_GET["promotion_id"];
+	$db_iface = new MySQLDatabase();
 
         //kvíz megjelenítés
 	/*A $promotion_id azonosítójú kvízt jeleníti meg*/
@@ -32,16 +25,16 @@
 	$promotion_nev = $row['nev'];  //kvíz cimét lementi
         $promotion_datum= $row['datum']; //kvíz záró dátumát lementi
 	//munkamenet nyitása, ha még nem volt elkezdve
-	if(!isset($_SESSION) && false === @session_start()) //@ - PHP hibaüzenetek elnyomása
+	if(!isset($_SESSION)) //@ - PHP hibaüzenetek elnyomása
 		die('Probléma a munkamenetekkel!');
 	
 	//a felhasználó által már megválaszolt kérdések eltárolása/betöltése
 	$answers = array();
         $helyesek = 0; // helyesen megválaszolt kérdések száma
-	if(!isset($_SESSION['quiz-'.$promotion_id]) || isset($_POST['reset_quiz'])){
-		$_SESSION['quiz-'.$promotion_id] = array();
+	if(!isset($_SESSION['quiz-'.$promotion_id."-".$_SESSION["user"]["id"]])){
+		$_SESSION['quiz-'.$promotion_id."-".$_SESSION["user"]["id"]] = array();
 	} else {
-		$answers = &$_SESSION['quiz-'.$promotion_id]; // $answers álneve lett a $_SESSION['quiz-'.$id] munkamenetváltozónak
+		$answers = &$_SESSION['quiz-'.$promotion_id."-".$_SESSION["user"]["id"]]; // $answers álneve lett a $_SESSION['quiz-'.$promotion_id."-".$_SESSION["user"]["id"]] munkamenetváltozónak
 	
 		/*A beérkező válasz feldolgozása*/
 		if(isset($_POST['answer']) && is_numeric($_POST['answer']) &&
@@ -58,15 +51,21 @@
 		}
 	}
         
-        $query_string = 'SELECT * FROM `{PREFIX}teljesites` WHERE `{PREFIX}teljesites`.`promocio_id`={PROMOCIO_ID} AND `{PREFIX}teljesites`.`felhasznalo_id`={USER_ID};';
+	$query_string = 'SELECT * FROM `{PREFIX}teljesites` WHERE `{PREFIX}teljesites`.`promocio_id`={PROMOCIO_ID} AND `{PREFIX}teljesites`.`felhasznalo_id`={USER_ID};';
 	$params = array('PROMOCIO_ID'=>$promotion_id, 'USER_ID'=>$_SESSION["user"]["id"]);
-        $result = $db_iface->num_rows($query_string ,$params); //Lekérdezzük a teljesites táblából, hogy a felhasználó kitöltötte-e már a kvízt
+	$result = $db_iface->num_rows($query_string ,$params); //Lekérdezzük a teljesites táblából, hogy a felhasználó kitöltötte-e már a kvízt
  	//ez a változó jelöli hogy befejeztük-e a quizt
-	$kitoltott; //egy korábbi kviz kitöltés megléte      
+	$kitoltott; //egy korábbi kviz kitöltés megléte   
+	$jol_toltotte_ki;
         if($result == 0) {
             $kitoltott = false;
         } else {
-            $kitoltott = true;
+			$query_string = 'SELECT * FROM `{PREFIX}teljesites` WHERE `{PREFIX}teljesites`.`promocio_id`={PROMOCIO_ID} AND `{PREFIX}teljesites`.`felhasznalo_id`={USER_ID};';
+			$params = array('PROMOCIO_ID'=>$promotion_id, 'USER_ID'=>$_SESSION["user"]["id"]);
+			$result = $db_iface->query($query_string ,$params); //Lekérdezzük a teljesites táblából, hogy a felhasználó kitöltötte-e már a kvízt
+            $row = mysql_fetch_array($result);	
+			$jol_toltotte_ki = $row["teljesult_e"] == 0 ? false : true;
+			$kitoltott = true;
         }
         
         $finished = true;
@@ -102,7 +101,7 @@
               )
         );
         */
-  //1.állapot    
+
 	$new_question;
 	if($finished || $kitoltott) { // ha az aktuális munkamenetben vagy egy korábbiban befejeztük a kvízt
 		foreach($answers as $q_id => $a_id) { // bejárjuk az asszociatív $answer tömbot, ahol az aktuális párból $q_id tárolja a kulcsot és $a_id az értéket
@@ -137,6 +136,7 @@
                 // helyes megoldás tényét elmentjük                    
                     if($helyesek == count($solutions)){ //$teljesult_e = $helyesek == count($_esolutions);
                         $teljesult_e = 1;
+						$jol_toltotte_ki = true;
                     } else {
                         $teljesult_e = 0; 
                     }
@@ -149,7 +149,7 @@
                         die("Adatbázis lekérdezési hiba.");
                     }
                 }
-                        
+        unset($_SESSION['quiz-'.$promotion_id."-".$_SESSION["user"]["id"]]); // session ürítés
 	} else { //ha nincs befejezve a kvíz -- 2. állapot
 		/*mutassuk a következő kérdést*/
 		//a kérdéshez tartozó válaszokat töltjük be

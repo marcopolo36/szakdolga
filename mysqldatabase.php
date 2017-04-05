@@ -12,7 +12,7 @@ class MySQLDatabase {
             $this->db["host"] = "localhost";
             $this->db["user"] = "root";
             $this->db["password"] = "";
-            $this->db["dbname"] = "zarodolgozat";
+            $this->db["dbname"] = "szakdoga_utf8";
             $this->prefix = "";
             $this->_connection = mysql_connect($this->db["host"], $this->db["user"] , $this->db["password"]);
             mysql_select_db($this->db["dbname"], $this->_connection);

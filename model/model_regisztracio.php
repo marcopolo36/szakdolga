@@ -1,11 +1,7 @@
-<?php
+﻿<?php
 
-    checkPermission('regisztracio');
+		checkPermission('regisztracio');
 
-	$page_title = "Regisztráció";
-	$menu = getMenu();
-	$page_main_title = "Regisztráció oldal!";
-	$page_content = "Regisztráció oldal tartalma!";
         $reg_sikeres = true;
         $db_iface = new MySQLDatabase();
         $errors = array();
@@ -39,7 +35,9 @@
                     $reg_sikeres = false;
                 } else {
                     login($_POST['nev'],$_POST['jelszo']);
-                    header('Location: index.php?site=kezdolap');
+					print "<script type='text/javascript'>".
+					      "window.location.href = 'index.php?site=kezdolap';".
+						  "</script>";
                 }
             }
         }

@@ -1,6 +1,8 @@
 <?php
-
 session_start();
+if(! isset($_SESSION)) {
+	//session_start();
+}
 
 // php üzenetek kikapcsolása biztonsági okból
 //error_reporting(0);

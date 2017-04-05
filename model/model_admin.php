@@ -1,11 +1,6 @@
-<?php
+﻿<?php
 
 checkPermission('admin');
-
-$page_title = "Adminisztrációs oldal";
-$menu = getMenu();
-$page_main_title = "Adminisztrációs oldal!";
-$page_content = "Adminisztrációs oldal tartalma";
 $errors = array();
 
 //admin funkció

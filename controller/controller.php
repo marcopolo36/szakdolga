@@ -1,5 +1,20 @@
 <?php
 
+if (isset($_GET["site"]) && 
+	$_GET["site"]== "kijelentkezes" && 
+	hasPermission("kijelentkezes")
+	){
+	logOut();
+	print "<script type='text/javascript'>".
+		  "window.location.href = 'index.php?site=kezdolap';".
+		  "</script>";
+}
+$menu = getMenu();
+$page_title = "Engedély megtagadva";
+if(isset($_GET["site"]) && isset($menu[$_GET["site"]])) {
+	$page_title = $_GET["site"];
+}
+include("view/header.php");
 if(isset($_GET["site"])){
 	if($_GET["site"]=="kezdolap") {            
 		include("model/model_kezdolap.php");
@@ -22,9 +37,6 @@ if(isset($_GET["site"])){
         } elseif ($_GET["site"]=="bejelentkezes"){
 		include("model/model_bejelentkezes.php");
 		include("view/view_bejelentkezes.php");
-        } elseif ($_GET["site"]=="kijelentkezes"){
-		include("model/model_kijelentkezes.php");
-		include("view/view_kijelentkezes.php");
         } elseif ($_GET["site"]=="admin"){
 		include("model/model_admin.php");
 		include("view/view_admin.php");
@@ -42,6 +54,6 @@ if(isset($_GET["site"])){
         include("model/model_kezdolap.php");
         include("view/view_kezdolap.php");
 }
-
+showErrors($errors);
 
 ?>

@@ -1,12 +1,8 @@
-<?php //Ez az oldal nem jelenik meg a menüben, mert az emailben található linkről landolnak itt. A GET szuperglobális tömbböl kiszedi a titkos üzenet azonosító számát.Ha nem 
+﻿<?php //Ez az oldal nem jelenik meg a menüben, mert az emailben található linkről landolnak itt. A GET szuperglobális tömbböl kiszedi a titkos üzenet azonosító számát.Ha nem 
 // ha nem találja hibát dob. A viewban kitölthetjük a kvízt. A végén a regisztrációd oldal linkje megjelenik.
  
-checkPermission('titkos');
+		checkPermission('titkos');
 
-	$page_title = "Kvíz";
-	$menu = getMenu();
-	$page_main_title = "Titkos üzeneted kvízjátéka!";
-	$page_content = "";
         $errors = array();
 
         $uzenet_id;

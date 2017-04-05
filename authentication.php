@@ -74,11 +74,28 @@ function setDefault() { //default értékekkel tölti fel a sessiont
     }
 }
 
+function hasPermission($page)
+{
+	global $adminPermissions, $userPermissions, $anonymusPermissions;
+	
+	$permissions = array();
+    switch ($_SESSION["user"]['szerepkor']) {
+        case 'Admin':
+            $permissions = $adminPermissions; break;
+        case 'Felhasználó':
+            $permissions = $userPermissions; break;
+        case 'Anonymus':
+            $permissions = $anonymusPermissions; break;
+    }
+	
+	return array_key_exists($page,$adminPermissions);
+}
+
 function getMenu()
 {   
     global $adminPermissions, $userPermissions, $anonymusPermissions;
 
-    $permissions;
+    $permissions = array();
     switch ($_SESSION["user"]['szerepkor']) {
         case 'Admin':
             $permissions = $adminPermissions; break;
@@ -97,7 +114,7 @@ function getMenu()
 function checkPermission($page)
 {   
    global $adminPermissions, $userPermissions, $anonymusPermissions;
-   
+   print "<html><head><meta charset='utf-8'></meta></head><body></body></html>";
    $noPermission = "Nincs engedélyed a(z) " . $page . " oldalra belépni!";
    switch ($_SESSION["user"]['szerepkor']) {
         case 'Admin':

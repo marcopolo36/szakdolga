@@ -1,16 +1,9 @@
-<?php
+﻿<?php
 
-checkPermission('kvizjatek');
-
-	$page_title = "Kvízjáték";
-	$menu = getMenu();
-	$page_main_title = "Kvízjáték oldal!";
-	$page_content = "";
-        $errors = array();
-        
-        $db_iface = new MySQLDatabase();
-
-        //header('Content-type: text/html; charset=iso-8859-2');
+	checkPermission('kvizjatek');
+	$errors = array();
+	
+	$db_iface = new MySQLDatabase();
 
         //kvíz megjelenítés
 	/*A $promotion_id azonosítójú kvízt jeleníti meg*/

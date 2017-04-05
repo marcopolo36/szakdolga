@@ -1,17 +1,15 @@
 <?php
 
-checkPermission('bejelentkezes');
-
-	$page_title = "Kezdőlap";
-	$menu = getMenu();
-	$page_main_title = "Bejelentkezés oldal!";
-        $errors = array();
+	checkPermission('bejelentkezes');
+	$errors = array();
         
-        if ($_SERVER["REQUEST_METHOD"] == "POST") {
-            if(! login($_POST["nev"],$_POST["jelszo"])) {
-                $errors[] = "Sikertelen bejelentkezés";
-            } else {
-                header('Location: index.php?site=kezdolap');
-            }
-        }
+	if ($_SERVER["REQUEST_METHOD"] == "POST") {
+		if(! login($_POST["nev"],$_POST["jelszo"])) {
+			$errors[] = "Sikertelen bejelentkezés";
+		} else {
+			print "<script type='text/javascript'>".
+				  "window.location.href = 'index.php?site=kezdolap';".
+				  "</script>";
+		}
+	}
 ?>

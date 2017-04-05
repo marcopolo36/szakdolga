@@ -1,14 +1,10 @@
-<?php
+﻿<?php
 
-checkPermission('uzenetkuldes');
+	checkPermission('uzenetkuldes');
 
     include('Mail.php');
     include('Mail/mime.php');
-  
-    $page_main_title = "Üzenetküldés oldal!";
-    $page_content = "";
-    $page_title = "Üzenetküldés";
-    $menu = getMenu();
+
     $errors = array();
 
     $db_iface = new MySQLDatabase();
@@ -67,11 +63,17 @@ checkPermission('uzenetkuldes');
 
         $tomorites = 100;
         $kep_info = getimagesize($cel);
-        $magassagX = (int)($kep_info[0]/5);  //sajnos ez az Y koordináta!
-        $szelessegY = (int)($kep_info[1]/2);   //ez meg az X koordináta!
+        $magassagX = (int)($kep_info[0]/5);  
+        $szelessegY = (int)($kep_info[1]/2);  
         $kep = imagecreatefromjpeg($cel);
         
         kepreir($kep, $tomorites, $magassagX, $szelessegY);
+   }
+   
+   function get_server_url($http_referer)
+   {
+		$pos = strpos($http_referer, "index.php");
+		return substr($http_referer, 0, $pos);
    }
     
    function emailt_kuld() // email küldése képpel
@@ -87,12 +89,17 @@ checkPermission('uzenetkuldes');
             $from = "divenyi.officenet@gmail.com"; //a tárhely szolgáltató értékeire átírni
             $to = $_POST["to"];   
             $subject = "Titkos üzeneted érkezett";
-            $url = "http://localhost/szakdolga/index.php?site=titkos&uzenet_id=" . $uzenet_id ;
+            $url = get_server_url($_SERVER['HTTP_REFERER']) . "index.php?site=titkos&uzenet_id=" . $uzenet_id ;
             $text = $_POST["szoveg"] ."\n Titkos üzenetedet itt olvashatod el: ". $url ;
-            $html = "<html lang='hu'><body>".$_POST["szoveg"]."<br/><a href='" . $url ."'> ***Titkos üzenetedet itt olvashatod el***</a></body></html>";
+            $html = "<html lang='hu'><body>"
+					.$_POST["szoveg"]."<br/>"
+					."<a href='" . $url ."'> ***Titkos üzenetedet itt olvashatod el***</a>"
+					."<img src='". get_server_url($_SERVER['HTTP_REFERER']) . "sent_images/" . $kep_id . ".jpg' />"
+					."</body></html>";
+			
             $crlf = "\n";
             $headers = array (
-		"Content-Type" => "text/html; charset=UTF-8",
+				"Content-Type" => "text/html; charset=UTF-8",
                 "From" => $from,
                 "To" => $to,
                 "Subject" => $subject);
@@ -159,7 +166,7 @@ checkPermission('uzenetkuldes');
         global $db_iface;
         global $uzenet_id;
         $success = false;
-        saveFormToSession();
+        
         if(isset($_POST['valaszok']) && !empty($_POST['valaszok']) && is_numeric($_POST['valaszok'])) { //érkezzenek postból válaszok és legalább 2 legyen! 
             if(empty($errors)) {
                $query_string = 'INSERT INTO `{PREFIX}uzenet` ' . 
@@ -223,6 +230,7 @@ checkPermission('uzenetkuldes');
     }
 
     if(isset($_POST["kerdes"])) {
+		saveFormToSession();
         formValidation();
         if(empty($errors)) {
             make_picture();
